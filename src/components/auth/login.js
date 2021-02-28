@@ -53,6 +53,7 @@ const SignIn = () => {
   }
   const handleSubmit = (e) => {
     e.preventDefault()
+    setIsAuthenticated(true)
     console.log(value)
   }
   if(isAuthenticated){

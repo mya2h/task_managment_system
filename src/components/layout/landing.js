@@ -1,12 +1,16 @@
 import React,{useEffect} from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import {Drawer,MenuIcon,Avatar,CssBaseline,Badge,Divider,Typography,IconButton,AppBar,Toolbar,MenuItem,Paper,Grid,Menu,Popover} from "@material-ui/core";
-// import image from '../../assets/images/ad.png'
+import {Drawer,Avatar,CssBaseline,Badge,Divider,Typography,IconButton,AppBar,Toolbar,MenuItem,Paper,Grid,Menu,Popover} from "@material-ui/core";
+import image from '../../assets/images/ad.png'
 import { Link } from 'react-router-dom';
 import {BrowserRouter as Router,Switch,Redirect,Route,} from "react-router-dom";
-import {ChevronLeftIcon,NotificationsIcon} from "@material-ui/icons";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import MenuIcon from "@material-ui/icons/Menu";
+import {Telegram} from '@material-ui/icons'
 import SideNav from "./sideBar";
+import Dashboard from '../dashboard/dashboard'
 
 const drawerWidth = 260;
 
@@ -153,10 +157,8 @@ const notificationOpts = {
     callback: () => alert('clicked!')
   }
 };
-const Dashboard = ({auth:{isAuthenticated,token,role},addToSeen,logout,getNotification,notify:{notification,count}}) => {
-  useEffect(() => {
-    getNotification()
-  }, [])
+const Landing = () => {
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -169,7 +171,6 @@ const Dashboard = ({auth:{isAuthenticated,token,role},addToSeen,logout,getNotifi
     </Switch>
   );
   const handleDrawerClose = () => {
-    console.log(window.location.pathname)
     if (open == true) {
       setOpen(false);
     } else {
@@ -206,22 +207,13 @@ const Dashboard = ({auth:{isAuthenticated,token,role},addToSeen,logout,getNotifi
   const handleNotificationClose = () => {
     setAnchorNotififcation(null);
   };
-  const handleNotification = (item,index) =>{
-    // notifications[index].seen = true
-    addToSeen(item._id)
-    console.log(notifications)
-  }
   const handleLogout = ()=>{
-    logout()
+    // logout()
   }
   const openNotification = Boolean(anchorNotification);
   const id = openNotification ? 'simple-popover' : undefined;
   
-  if (token == null) {
-    return (
-      <Redirect to="/" />
-    )
-  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -232,6 +224,7 @@ const Dashboard = ({auth:{isAuthenticated,token,role},addToSeen,logout,getNotifi
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
+
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             className={clsx(
@@ -240,13 +233,6 @@ const Dashboard = ({auth:{isAuthenticated,token,role},addToSeen,logout,getNotifi
             )}
           >
             <MenuIcon />
-          </IconButton>
-          <IconButton style={{ marginLeft: "90%" }} onClick={handleClick}>
-            <Badge badgeContent={count} color="primary" 
-            classes={{ badge: classes.customBadge }}
-        className={classes.margin} >
-              <NotificationsIcon />
-            </Badge>
           </IconButton>
           <Popover
         id={id}
@@ -266,47 +252,9 @@ const Dashboard = ({auth:{isAuthenticated,token,role},addToSeen,logout,getNotifi
         }}
       >
         <div  className={classes.popup}>
-        {notification != null && notification.length > 0 && notification.map((item,index)=>(
-          <div >
-               {item.seen == true && 
-               <div>
-                      {/* <Link to="" style={{ color: 'inherit', textDecoration: 'inherit' }} onClick = {()=> handleNotification(item,index)}> */}
-                      <Paper className={classes.paperNotificationSeen} elevation={0}>
-                          <Grid container wrap="nowrap" spacing={2}>
-                           <Grid item xs>
-                             {/* {item.deviceUser !=null&&( */}
-                                <Typography>Un intended actvity App {item.app} title {item.title} host {item.host} is done</Typography>
-                             {/* )} */}
-                            
-                           </Grid>
-                          
-                         </Grid>
-                       </Paper>
-                      {/* </Link> */}
-                        <Divider light/>
-                        </div>
-               }
-               {item.seen == false && 
-               <div>
-                <Link style={{ color: 'inherit', textDecoration: 'inherit' }} onClick = {()=> handleNotification(item,index)}> 
-                      <Paper className={classes.paperNotification} elevation={0}>
-                          <Grid container wrap="nowrap" spacing={2}>
-                           <Grid item xs>
-                           <Typography>{item.app} title {item.title} host {item.host}</Typography>
-                           </Grid>
-                          
-                         </Grid>
-                       </Paper>
-                      </Link>
-                        <Divider light/>
-                        </div>
-               }
-              </div>
-            
-        ))}
           </div>
       </Popover>
-          <IconButton onClick={handleProfile}>
+          <IconButton onClick={handleProfile}  style={{ marginLeft: "90%" }}>
               <br />
               <div className={classes.title}>
               </div>
@@ -320,9 +268,9 @@ const Dashboard = ({auth:{isAuthenticated,token,role},addToSeen,logout,getNotifi
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              {role == 'SuperAdmin'&&(
+              {/* {role == 'SuperAdmin'&&(
                 <Link  to="/admin/profile" variant='body2' style={{ color: 'inherit', textDecoration: 'inherit' }}> <MenuItem >Profile</MenuItem></Link>
-              )}
+              )} */}
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
         </Toolbar>
@@ -341,7 +289,7 @@ const Dashboard = ({auth:{isAuthenticated,token,role},addToSeen,logout,getNotifi
             noWrap
             className={classes.title}
           >
-            Employee<span className={classes.span}>Track</span>
+           <span className={classes.span}>Database</span>
           </Typography>
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon className={classes.icon} />
@@ -352,11 +300,11 @@ const Dashboard = ({auth:{isAuthenticated,token,role},addToSeen,logout,getNotifi
         </div>
       </Drawer>
       <main className={classes.content}>
-        <div>{switchRoute}</div>
+    <Dashboard/>
       </main>
     </div>
   );
 };
 
-export default Dashboard
+export default Landing
 

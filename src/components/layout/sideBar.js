@@ -1,11 +1,11 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import {List,ListItem,ListItemText} from "@material-ui/coret";
+import {List,ListItem,ListItemText} from "@material-ui/core";
 import { NavLink ,Link} from 'react-router-dom';
-import {DashboardIcon,ListItemIcon,FileCopyIcon,LocalActivityIcon,DevicesOtherIcon} from "@material-ui/icons";
+import LocalActivityIcon from "@material-ui/icons/LocalActivity";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import '../../assets/css/sideNav.css'
 const theme = createMuiTheme({
   typography: {
     fontSize: 13,
@@ -66,7 +66,7 @@ const SideNav = () => {
         >
           <ListItem button className={classes.listitem}>
             <ListItemIcon className={classes.icon}>
-              <DashboardIcon />
+            <LocalActivityIcon />
             </ListItemIcon>
             <ListItemText primary="All Tickets" />
           </ListItem>
@@ -79,7 +79,7 @@ const SideNav = () => {
         >
           <ListItem button className={classes.listitem}>
             <ListItemIcon className={classes.icon}>
-              <FileCopyIcon />
+            <LocalActivityIcon />
             </ListItemIcon>
             <ListItemText primary="New Tickets" />
           </ListItem>
@@ -92,7 +92,7 @@ const SideNav = () => {
         >
           <ListItem button className={classes.listitem}>
             <ListItemIcon className={classes.icon}>
-              <DevicesOtherIcon />
+            <LocalActivityIcon />
             </ListItemIcon>
             <ListItemText primary="Tickets In Progress" />
           </ListItem>
@@ -110,19 +110,7 @@ const SideNav = () => {
           </ListItem>
         </NavLink>
         <NavLink
-          to="/admin/suspiciousActvities"
-           className="Nav_link"
-          activeClassName="activeRoute"
-          activeStyle={{ color: 'rgb(253, 184, 81)' }}>
-          <ListItem button className={classes.listitem}>
-            <ListItemIcon className={classes.icon}>
-              <LocalActivityIcon />
-            </ListItemIcon>
-            <ListItemText primary="Tickets of Hold" />
-          </ListItem>
-        </NavLink>
-        <NavLink
-          to="/admin/suspiciousActvities"
+          to="/admin/suspicious"
            className="Nav_link"
           activeClassName="activeRoute"
           activeStyle={{ color: 'rgb(253, 184, 81)' }}>
@@ -134,7 +122,7 @@ const SideNav = () => {
           </ListItem>
         </NavLink>
         <NavLink
-          to="/admin/suspiciousActvities"
+          to="/admin/Actvities"
            className="Nav_link"
           activeClassName="activeRoute"
           activeStyle={{ color: 'rgb(253, 184, 81)' }}>
@@ -146,7 +134,7 @@ const SideNav = () => {
           </ListItem>
         </NavLink>
         <NavLink
-          to="/admin/suspiciousActvities"
+          to="/admin/suspiciActvities"
            className="Nav_link"
           activeClassName="activeRoute"
           activeStyle={{ color: 'rgb(253, 184, 81)' }}>
@@ -158,7 +146,7 @@ const SideNav = () => {
           </ListItem>
         </NavLink>
         <NavLink
-          to="/admin/suspiciousActvities"
+          to="/admin/suspicities"
            className="Nav_link"
           activeClassName="activeRoute"
           activeStyle={{ color: 'rgb(253, 184, 81)' }}>
