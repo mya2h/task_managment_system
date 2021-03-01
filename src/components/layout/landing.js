@@ -11,7 +11,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import {Telegram} from '@material-ui/icons'
 import SideNav from "./sideBar";
 import Dashboard from '../dashboard/dashboard'
-
+import SignUp from '../auth/signup'
 const drawerWidth = 260;
 
 const useStyles = makeStyles((theme) => ({
@@ -166,8 +166,9 @@ const Landing = () => {
   };
   const switchRoute = (
     <Switch>
-      {/* <Route exact path="/admin/dashboard" component={GraphInfo} />
-      <Redirect from="/admin" to="/admin/dashboard" /> */}
+       <Route exact path ="/admin/signUp" component = {SignUp}/>
+      <Route exact path="/admin/dashboard" component={Dashboard} />
+      <Redirect from = "/admin" to = "/admin/dashboard"/>
     </Switch>
   );
   const handleDrawerClose = () => {
@@ -272,6 +273,10 @@ const Landing = () => {
                 <Link  to="/admin/profile" variant='body2' style={{ color: 'inherit', textDecoration: 'inherit' }}> <MenuItem >Profile</MenuItem></Link>
               )} */}
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              <MenuItem >
+              <Link to="/admin/signUp" style={{  textDecoration: 'none'}}>
+              Profile
+              </Link></MenuItem>
             </Menu>
         </Toolbar>
       </AppBar>
@@ -300,7 +305,7 @@ const Landing = () => {
         </div>
       </Drawer>
       <main className={classes.content}>
-    <Dashboard/>
+   {switchRoute}
       </main>
     </div>
   );

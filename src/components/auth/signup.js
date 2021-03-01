@@ -5,6 +5,12 @@ import {Telegram} from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
+  main: {
+    // backgroundColor: '#1A2038',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   all: {
     margin: theme.spacing(4)
   },
@@ -12,7 +18,9 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginTop: theme.spacing(5)
+    marginTop: theme.spacing(2),
+    marginLeft: theme.spacing(10),
+    marginRight: theme.spacing(10)
     // marginLeft:theme.spacing(4)
   },
   form: {
@@ -92,7 +100,7 @@ const SignUp = () => {
     setValue('')
   }
   return (
-    <div >
+    <div className={classes.main}>
       <Paper className={classes.paper}>
         <Typography component="h1" variant="h5" className={classes.label}>
           Register User
