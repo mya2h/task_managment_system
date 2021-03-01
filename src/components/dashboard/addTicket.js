@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     form: {
         width: '80%', // Fix IE 11 issue.
         marginTop: theme.spacing(4),
-        marginBottom: theme.spacing(10)
+        marginBottom: theme.spacing(1)
     },
     clear: {
         margin: theme.spacing(3, 0, 2),
@@ -205,30 +205,16 @@ const NewTicket = () => {
                                 onChange={handleChange}
                             />
                         </Grid>
-                        {/* <Grid item xs={2}>
-                            <Button
+                    </Grid>
+                    <Button
                                 type="submit"
                                 fullWidth
                                 variant="contained"
                                 color="primary"
                                 className={classes.submit}
                             >
-                                <Telegram /> Register
+                                <Telegram /> Add
           </Button>
-                        </Grid> */}
-                        {/* <Grid item xs={2}>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                className={classes.clear}
-                                onClick={clearData}
-                            >
-                                <Telegram /> Clear
-          </Button>
-                        </Grid> */}
-                    </Grid>
                 </form>
             </Paper>
         </div>

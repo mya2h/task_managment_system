@@ -8,6 +8,9 @@ const useStyles = makeStyles({
   root: {
     margin: 12
   },
+  modal:{
+    minHeight:"690px"
+  },
   paper: {
     height: "120px",
     //  margin:"10px"
@@ -63,7 +66,7 @@ const Dashboard = () => {
       <div className={classes.table}>
         <TaskList />
       </div>
-      <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+      <Dialog onClose={handleClose} className={classes.modal} aria-labelledby="simple-dialog-title" open={open}>
         <DialogTitle id="simple-dialog-title">Add New Ticket</DialogTitle>
     <NewTicket/>
     </Dialog>
