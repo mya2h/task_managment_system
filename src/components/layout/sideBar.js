@@ -59,7 +59,7 @@ const SideNav = () => {
         activeclassname="active"
       >
         <NavLink
-          to="/admin/dashboard"
+          to="/admin/Tickets/allTickets"
           className="Nav_link"
           activeClassName="activeRoute"
           activeStyle={{ color: 'rgb(253, 184, 81)' }}
@@ -72,7 +72,7 @@ const SideNav = () => {
           </ListItem>
         </NavLink>
         <NavLink
-          to="/admin/resource"
+          to="/admin/Tickets/newTickets"
           className="Nav_link"
           activeClassName="activeRoute"
           activeStyle={{ color: 'rgb(253, 184, 81)' }}
@@ -85,7 +85,7 @@ const SideNav = () => {
           </ListItem>
         </NavLink>
         <NavLink
-          to="/admin/device"
+          to="/admin/Tickets/ticketsInProgress"
           className="Nav_link"
           activeClassName="activeRoute"
           activeStyle={{ color: 'rgb(253, 184, 81)'}}
@@ -98,7 +98,7 @@ const SideNav = () => {
           </ListItem>
         </NavLink>
         <NavLink
-          to="/admin/suspiciousActvities"
+          to="/admin/Tickets/holdTickets"
            className="Nav_link"
           activeClassName="activeRoute"
           activeStyle={{ color: 'rgb(253, 184, 81)' }}>
@@ -110,7 +110,7 @@ const SideNav = () => {
           </ListItem>
         </NavLink>
         <NavLink
-          to="/admin/suspicious"
+          to="/admin/Tickets/closedTickets"
            className="Nav_link"
           activeClassName="activeRoute"
           activeStyle={{ color: 'rgb(253, 184, 81)' }}>
@@ -122,7 +122,7 @@ const SideNav = () => {
           </ListItem>
         </NavLink>
         <NavLink
-          to="/admin/Actvities"
+          to="/admin/Tickets/threeeDaysOldTickets"
            className="Nav_link"
           activeClassName="activeRoute"
           activeStyle={{ color: 'rgb(253, 184, 81)' }}>
@@ -134,7 +134,7 @@ const SideNav = () => {
           </ListItem>
         </NavLink>
         <NavLink
-          to="/admin/suspiciActvities"
+          to="/admin/Tickets/openedTodayTickets"
            className="Nav_link"
           activeClassName="activeRoute"
           activeStyle={{ color: 'rgb(253, 184, 81)' }}>
@@ -146,7 +146,7 @@ const SideNav = () => {
           </ListItem>
         </NavLink>
         <NavLink
-          to="/admin/suspicities"
+          to="/admin/Tickets/closedTodayTickets"
            className="Nav_link"
           activeClassName="activeRoute"
           activeStyle={{ color: 'rgb(253, 184, 81)' }}>

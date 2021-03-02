@@ -48,8 +48,8 @@ const tableIcons = {
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
-const TaskList = () => {
-
+const NewTickets = () => {
+    
     const [state,setState] = useState({
         columns:[
             { title: 'Class', field: 'class' },
@@ -72,7 +72,7 @@ const TaskList = () => {
     })
     return (
       <MaterialTable
-        title="Tickets In Progress"
+        title="New Tickets"
         icons={tableIcons}
         columns={state.columns}
         data={state.data}        
@@ -91,4 +91,4 @@ const TaskList = () => {
       />
     )
   }
-export default TaskList
+export default NewTickets

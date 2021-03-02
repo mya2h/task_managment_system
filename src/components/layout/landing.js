@@ -167,8 +167,15 @@ const Landing = () => {
   const switchRoute = (
     <Switch>
        <Route exact path ="/admin/signUp" component = {SignUp}/>
-      <Route exact path="/admin/dashboard" component={Dashboard} />
-      <Redirect from = "/admin" to = "/admin/dashboard"/>
+      <Route  path="/admin/Tickets" component={Dashboard} />
+      {/* <Route exact path="/admin/newTickets" component={Dashboard} />
+      <Route exact path="/admin/ticketsInProgress" component={Dashboard} />
+      <Route exact path="/admin/holdTickets" component={Dashboard} />
+      <Route exact path="/admin/closedTickets" component={Dashboard} />
+      <Route exact path="/admin/threeeDaysOldTickets" component={Dashboard} />
+      <Route exact path="/admin/openedTodayTickets" component={Dashboard} />
+      <Route exact path="/admin/closedTodayTickets" component={Dashboard} /> */}
+      <Redirect from = "/admin" to = "/admin/Tickets"/>
     </Switch>
   );
   const handleDrawerClose = () => {
