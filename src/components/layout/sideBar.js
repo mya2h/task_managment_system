@@ -106,7 +106,7 @@ const SideNav = () => {
             <ListItemIcon className={classes.icon}>
               <LocalActivityIcon />
             </ListItemIcon>
-            <ListItemText primary="Tickets of Hold" />
+            <ListItemText primary="Tickets On Hold" />
           </ListItem>
         </NavLink>
         <NavLink

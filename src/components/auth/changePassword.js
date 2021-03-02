@@ -3,7 +3,7 @@ import { TextField,Grid,Button,FormControlLabel,Checkbox,Paper } from '@material
 import image from '../../assets/images/admin.png'
 import {Redirect} from 'react-router'
 import { makeStyles } from '@material-ui/core/styles';
-import {authenticate} from '../../actions/API'
+import {changePassword} from '../../actions/API'
 const useStyles = makeStyles(theme => ({
   main: {
     // backgroundColor: '#1A2038',
@@ -44,8 +44,8 @@ const ChangePassword = () => {
   const [isAuthenticated,setIsAuthenticated] = useState(false)
   const classes = useStyles();
   const [value, setValue] = React.useState({
-    email: '',
-    password: ''
+    currentPassword: '',
+    newPassword: ''
   })
   const handleChange = (e) => {
     console.log(e.target.value)
@@ -53,7 +53,7 @@ const ChangePassword = () => {
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-   authenticate(value)
+    changePassword(value)
     // setIsAuthenticated(true)
     console.log(value)
   }
@@ -83,13 +83,13 @@ const ChangePassword = () => {
                 margin="normal"
                 required
                 fullWidth
-                name="password"
+                name="newPassword"
                 label="New Password"
                 type="password"
                 id="password"
                 onChange={handleChange}
               />
-              <TextField
+              {/* <TextField
                 variant="outlined"
                 margin="normal"
                 required
@@ -99,7 +99,7 @@ const ChangePassword = () => {
                 type="password"
                 id="password"
                 onChange={handleChange}
-              />
+              /> */}
               <br />
               {/* <Link to="/admin" style={{ color: 'inherit', textDecoration: 'inherit' }}> */}
                 <Button

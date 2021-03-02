@@ -1,9 +1,11 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import { TextField, Grid, FormHelperText, FormControl, InputLabel, MenuItem, Select, Paper } from '@material-ui/core';
-import { Telegram } from '@material-ui/icons'
+import { CodeSharp, Telegram } from '@material-ui/icons'
+import Notifications, {notify} from 'react-notify-toast';
 import { makeStyles } from '@material-ui/core/styles';
-
+import {addTicket} from '../../actions/API'
+import { store } from 'react-notifications-component';
 const useStyles = makeStyles(theme => ({
     all: {
         margin: theme.spacing(4)
@@ -47,49 +49,43 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const NewTicket = () => {
+   
     const classes = useStyles();
+    const userId = localStorage.getItem('user')
     const [value, setValue] = React.useState('')
-    const [user, setUser] = React.useState({
-        firstName: '',
-        lastName: '',
-        userName: '',
-        roleType: '',
-        email: '',
-        password: '',
-        confirm_password: ''
+    const [ticket, setticket] = React.useState({
+        class: '',
+        director: '',
+        projectType: '',
+        year: '',
+        leader: '',
+        baseCamp: '',
+        projectLink: '',
+        description:'',
+        assignedTo:userId
     })
 
     const handleChange = (event) => {
         console.log(event.target.value)
-        setUser({ ...user, [event.target.name]: event.target.value })
+        setticket({ ...ticket, [event.target.name]: event.target.value })
     };
     const handelRadioChange = (event) => {
-        setUser({ ...user, roleType: event.target.value })
+        setticket({ ...ticket, year: event.target.value })
         setValue(event.target.value);
     }
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(user)
-        setUser({
-            firstName: '',
-            lastName: '',
-            userName: '',
-            roleType: '',
-            email: '',
-            password: '',
-            confirm_password: ''
-        })
-        setValue('')
-    }
-    const clearData = () => {
-        setUser({
-            firstName: '',
-            lastName: '',
-            userName: '',
-            roleType: '',
-            email: '',
-            password: '',
-            confirm_password: ''
+        addTicket(ticket)
+        setticket({
+            class: '',
+            director: '',
+            projectType: '',
+            year: '',
+            projectLink: '',
+            leader: '',
+            baseCamp: '',
+            description:'',
+            assignedTo:userId         
         })
         setValue('')
     }
@@ -101,11 +97,11 @@ const NewTicket = () => {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 autoComplete="fname"
-                                name="firstName"
-                                value={user.firstName}
+                                name="class"
+                                value={ticket.class}
                                 required
                                 fullWidth
-                                id="firstName"
+                                id="class"
                                 label="Class"
                                 onChange={handleChange}
                             />
@@ -114,10 +110,10 @@ const NewTicket = () => {
                             <TextField
                                 required
                                 fullWidth
-                                id="lastName"
+                                id="director"
                                 label="Director"
-                                value={user.lastName}
-                                name="lastName"
+                                value={ticket.director}
+                                name="director"
                                 autoComplete="lname"
                                 onChange={handleChange}
                             />
@@ -131,13 +127,18 @@ const NewTicket = () => {
                                     labelId="demo-simple-select-placeholder-label-label"
                                     id="demo-simple-select-placeholder-label"
                                     label="d;fkl"
+                                    value={ticket.projectType}
+                                    inputProps={{
+                                        name: 'projectType',
+                                        id: 'age-native-simple',
+                                      }}
                                     onChange={handleChange}
                                     displayEmpty
                                     className={classes.selectEmpty}
                                 >
-                                    <MenuItem value={10}>Demo</MenuItem>
-                                    <MenuItem value={20}>Special Project</MenuItem>
-                                    <MenuItem value={30}>Marker</MenuItem>
+                                    <MenuItem value={'demo'}>Demo</MenuItem>
+                                    <MenuItem value={'specialProject'}>Special Project</MenuItem>
+                                    <MenuItem value={'marker'}>Marker</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -150,13 +151,18 @@ const NewTicket = () => {
                                     labelId="demo-simple-select-placeholder-label-label"
                                     id="demo-simple-select-placeholder-label"
                                     label="d;fkl"
+                                    value={ticket.year}
+                                    inputProps={{
+                                        name: 'year',
+                                        id: 'age-native-simple',
+                                      }}
                                     onChange={handleChange}
                                     displayEmpty
                                     className={classes.selectEmpty}
                                 >
-                                    <MenuItem value={10}>1232</MenuItem>
-                                    <MenuItem value={20}>1930</MenuItem>
-                                    <MenuItem value={30}>2020</MenuItem>
+                                    <MenuItem value={'1232'}>1232</MenuItem>
+                                    <MenuItem value={'1930'}>1930</MenuItem>
+                                    <MenuItem value={'2020'}>2020</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -164,11 +170,11 @@ const NewTicket = () => {
                             <TextField
                                 required
                                 fullWidth
-                                name="password"
+                                name="leader"
                                 label="Leader"
                                 pattern=".{5,15}"
-                                value={user.password}
-                                id="password"
+                                value={ticket.leader}
+                                id="leader"
                                 onChange={handleChange}
                             />
                         </Grid>
@@ -176,21 +182,9 @@ const NewTicket = () => {
                             <TextField
                                 required
                                 fullWidth
-                                name="confirm_password"
-                                label="Project Link"
-                                value={user.confirm_password}
-                                id="password"
-                                onChange={handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                name="confirm_password"
+                                name="baseCamp"
                                 label="Base Camp"
-                                value={user.confirm_password}
-                                id="password"
+                                value={ticket.baseCamp}
                                 onChange={handleChange}
                             />
                         </Grid>
@@ -198,10 +192,19 @@ const NewTicket = () => {
                             <TextField
                                 required
                                 fullWidth
-                                name="confirm_password"
+                                name="projectLink"
                                 label="Project Link"
-                                value={user.confirm_password}
-                                id="password"
+                                value={ticket.projectLink}
+                                onChange={handleChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                name="description"
+                                label="Description"
+                                value={ticket.description}
                                 onChange={handleChange}
                             />
                         </Grid>

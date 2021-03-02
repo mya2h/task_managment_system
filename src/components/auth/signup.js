@@ -79,24 +79,16 @@ const SignUp = () => {
     register(user)
     setUser({
       fullName: '',
-      lastName: '',
-      userName: '',
-      roleType: '',
       email: '',
-      password: '',
-      confirm_password: ''
+      password: ''
     })
     setValue('')
   }
   const clearData = () => {
     setUser({
       fullName: '',
-      lastName: '',
-      userName: '',
-      roleType: '',
       email: '',
       password: '',
-      confirm_password: ''
     })
     setValue('')
   }
@@ -119,7 +111,7 @@ const SignUp = () => {
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 autoComplete="fname"
                 name="fullName"
@@ -127,23 +119,11 @@ const SignUp = () => {
                 required
                 fullWidth
                 id="fullName"
-                label="First Name"
+                label="Full Name"
                 onChange={handleChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                value = {user.lastName}
-                name="lastName"
-                autoComplete="lname"
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
@@ -155,27 +135,7 @@ const SignUp = () => {
                 onChange={handleChange}
               />
             </Grid>
-            <Grid item xs={6}>
-              <TextField
-                required
-                fullWidth
-                id="userName"
-                label="User Name"
-                value = {user.userName}
-                name="userName"
-                onChange={handleChange}
-              />
-            </Grid>
-            {/* <Grid item xs={12}>
-              <FormControl  component="fieldset">
-              <FormLabel component="legend">Role</FormLabel>
-                <RadioGroup  aria-label="role" name="roleType" value={value} onChange={handelRadioChange} row>
-                  <FormControlLabel value="superAdmin" control={<Radio />} label="Super Admin" className={classes.radio} />
-                  <FormControlLabel value="HRpersonnel" control={<Radio />} label="HR Personnel" className={classes.radio} />
-                </RadioGroup>
-              </FormControl>
-            </Grid> */}
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
@@ -183,18 +143,6 @@ const SignUp = () => {
                 label="Password"
                 pattern=".{5,15}"
                 value = {user.password}
-                type="password"
-                id="password"
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                required
-                fullWidth
-                name="confirm_password"
-                label="Confirm Password"
-                value = {user.confirm_password}
                 type="password"
                 id="password"
                 onChange={handleChange}
