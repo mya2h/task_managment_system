@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React,{useState,useEffect} from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import {Drawer,Avatar,CssBaseline,Badge,Divider,Typography,IconButton,AppBar,Toolbar,MenuItem,Paper,Grid,Menu,Popover} from "@material-ui/core";
@@ -158,23 +158,22 @@ const notificationOpts = {
   }
 };
 const Landing = () => {
-
+  const [isAuthenticated,setIsAuthenticated] = useState(true)
+  useEffect(()=>{
+    if(localStorage.getItem('token') == null){
+      setIsAuthenticated(false)
+    }
+  })
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+
   const switchRoute = (
     <Switch>
        <Route exact path ="/admin/signUp" component = {SignUp}/>
       <Route  path="/admin/Tickets" component={Dashboard} />
-      {/* <Route exact path="/admin/newTickets" component={Dashboard} />
-      <Route exact path="/admin/ticketsInProgress" component={Dashboard} />
-      <Route exact path="/admin/holdTickets" component={Dashboard} />
-      <Route exact path="/admin/closedTickets" component={Dashboard} />
-      <Route exact path="/admin/threeeDaysOldTickets" component={Dashboard} />
-      <Route exact path="/admin/openedTodayTickets" component={Dashboard} />
-      <Route exact path="/admin/closedTodayTickets" component={Dashboard} /> */}
       <Redirect from = "/admin" to = "/admin/Tickets"/>
     </Switch>
   );
@@ -216,11 +215,16 @@ const Landing = () => {
     setAnchorNotififcation(null);
   };
   const handleLogout = ()=>{
-    // logout()
+    localStorage.removeItem('token')
+    setIsAuthenticated(false)
   }
   const openNotification = Boolean(anchorNotification);
   const id = openNotification ? 'simple-popover' : undefined;
-  
+  if(isAuthenticated == false){
+    return(
+      <Redirect to = "/"/>
+    )
+  }
 
   return (
     <div className={classes.root}>

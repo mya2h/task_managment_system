@@ -1,9 +1,11 @@
 import axios from 'axios'
 import Notifications, {notify} from 'react-notify-toast';
 import jwt_decode from "jwt-decode";
+import {BrowserRouter as Router,Switch,Redirect,Route,} from "react-router-dom";
 import React, { Fragment } from "react";
 import { useAlert } from "react-alert";
 import { store } from 'react-notifications-component';
+import { useHistory } from "react-router-dom";
 require('dotenv').config()
 const baseUrl = "http://localhost:4000/api"
 
@@ -25,6 +27,7 @@ export const register = async (value) => {
     }
 }
 export const authenticate = async (value) =>{
+    
     console.log(baseUrl)
     const body = JSON.stringify(value)
     console.log(body)
@@ -39,8 +42,9 @@ export const authenticate = async (value) =>{
         console.log(res.data)
         localStorage.setItem('token',res.data.token)
         var decoded = jwt_decode(res.data.token);
-        console.log(decoded)
         localStorage.setItem('user',decoded._id)
+        localStorage.setItem('userName',decoded.fullName)
+      
     }
     catch (err) {
         // alert(err.response.data)
@@ -92,7 +96,13 @@ export const addTicket = async (value) =>{
     }
     try {
         const res = await axios.post(baseUrl+"/ticket", body, config)
-        console.log(res.data)
+        getTicket()
+        newTicket()
+        ticketProgress()
+        ticketClosed()
+        older3Day()
+        openedToday()
+        closedToday()
     }
     catch (err) {
         console.log(err.response)
@@ -132,9 +142,7 @@ export const updateTicket = async (value) =>{
     }
 }
 
-export const newTicket = async (value) =>{
-    const body = JSON.stringify(value)
-    console.log(body)
+export const newTicket = async () =>{
     const config = {
         headers: {
             'Content-Type': 'application/json',

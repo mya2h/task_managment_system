@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextField,Grid,Button,FormControlLabel,Checkbox,Paper } from '@material-ui/core';
 import image from '../../assets/images/admin.png'
-import {Redirect} from 'react-router'
+import { createBrowserHistory } from 'history';
+import {Redirect,useHistory} from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import {authenticate} from '../../actions/API'
 const useStyles = makeStyles(theme => ({
@@ -41,7 +42,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SignIn = () => {
+  let history = useHistory();
   const [isAuthenticated,setIsAuthenticated] = useState(false)
+  useEffect(()=>{
+    if(localStorage.getItem('token')){
+      setIsAuthenticated(true)
+    }
+  })
   const classes = useStyles();
   const [value, setValue] = React.useState({
     email: '',
@@ -52,16 +59,15 @@ const SignIn = () => {
     setValue({ ...value, [e.target.name]: e.target.value })
   }
   const handleSubmit = (e) => {
-    e.preventDefault()
     if(authenticate(value)){
       setIsAuthenticated(true)
     }
-    console.log(value)
+
   }
-  if(isAuthenticated){
-    return(
-      <Redirect to="/admin"/>
-    )
+  if(localStorage.getItem('token')){
+    console.log("got it")
+    history.push("/admin");
+   
   }
   return (
     <div className={classes.main}>
