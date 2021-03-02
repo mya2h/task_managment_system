@@ -220,11 +220,11 @@ const Landing = () => {
   }
   const openNotification = Boolean(anchorNotification);
   const id = openNotification ? 'simple-popover' : undefined;
-  if(isAuthenticated == false){
-    return(
-      <Redirect to = "/"/>
-    )
-  }
+  // if(isAuthenticated == false){
+  //   return(
+  //     <Redirect to = "/"/>
+  //   )
+  // }
 
   return (
     <div className={classes.root}>
@@ -266,12 +266,13 @@ const Landing = () => {
         <div  className={classes.popup}>
           </div>
       </Popover>
-          <IconButton onClick={handleProfile}  style={{ marginLeft: "90%" }}>
+          <IconButton onClick={handleProfile}  style={{ marginLeft: "88%" }}>
               <br />
               <div className={classes.title}>
               </div>
               {/* <Person /><ArrowDropDownIcon /> */}
-              <Avatar alt="Remy Sharp" src={image} />
+              <Avatar alt="Remy Sharp" src={image} /><br/>
+              <div>{localStorage.getItem('userName')}</div>
             </IconButton>
             <Menu
               id="simple-menu"

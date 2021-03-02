@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { TextField,Grid,IconButton, Dialog, DialogTitle,Typography,Paper } from '@material-ui/core';
 import {Telegram} from '@material-ui/icons'
+import Notifications, { notify } from 'react-notify-toast';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
@@ -83,6 +84,7 @@ const SignUp = () => {
       password: ''
     })
     setValue('')
+    notify.show("Connection Error !", "error");
   }
   const clearData = () => {
     setUser({
