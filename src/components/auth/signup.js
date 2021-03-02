@@ -1,15 +1,15 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import { TextField,Grid,Typography,Paper } from '@material-ui/core';
+import { TextField,Grid,IconButton, Dialog, DialogTitle,Typography,Paper } from '@material-ui/core';
 import {Telegram} from '@material-ui/icons'
+import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 import {register} from '../../actions/API'
+import ChangePassword from './changePassword'
 const useStyles = makeStyles(theme => ({
   main: {
-    // backgroundColor: '#1A2038',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    margin:theme.spacing(3)
   },
   all: {
     margin: theme.spacing(4)
@@ -18,9 +18,9 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginTop: theme.spacing(2),
-    marginLeft: theme.spacing(10),
-    marginRight: theme.spacing(10)
+    marginTop: theme.spacing(4),
+    marginLeft: theme.spacing(7),
+    marginRight: theme.spacing(7)
     // marginLeft:theme.spacing(4)
   },
   form: {
@@ -100,8 +100,19 @@ const SignUp = () => {
     })
     setValue('')
   }
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false)
+  };
+  const handleOpen = () => {
+    setOpen(true)
+  };
   return (
     <div className={classes.main}>
+        <Button onClick={handleOpen} style={{ float: "right" }} variant="contained" size="medium" color="primary">
+        Change Password
+        </Button>
+        <br/>
       <Paper className={classes.paper}>
         <Typography component="h1" variant="h5" className={classes.label}>
           Register User
@@ -213,16 +224,16 @@ const SignUp = () => {
           </Button>
             </Grid>
           </Grid>
-
-          {/* <Grid container justify="flex-end">
-            <Grid item>
-            <Link to = "/" style={{ color: 'inherit', textDecoration: 'inherit'}}>
-                Already have an account? Sign in
-            </Link>
-            </Grid>
-          </Grid> */}
         </form>
       </Paper>
+      <Dialog onClose={handleClose} className={classes.modal} aria-labelledby="simple-dialog-title" open={open}>
+        <DialogTitle id="simple-dialog-title">Change Password
+        <IconButton onClick={handleClose} style={{float:'right'}} className={classes.dialogTitle}>
+            <CloseIcon />
+        </IconButton>
+        </DialogTitle>
+        <ChangePassword/>
+    </Dialog>
     </div>
 
   );

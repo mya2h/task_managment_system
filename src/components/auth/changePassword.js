@@ -5,39 +5,39 @@ import {Redirect} from 'react-router'
 import { makeStyles } from '@material-ui/core/styles';
 import {authenticate} from '../../actions/API'
 const useStyles = makeStyles(theme => ({
-  paper: {
-    marginTop: '12%',
-    paddingRight: theme.spacing(8),
-    paddingLeft: theme.spacing(8),
-    paddingBottom: theme.spacing(9),
-    width: '37%',
-    borderRadius: '15px'
-
+  main: {
+    // backgroundColor: '#1A2038',
+    // display: 'flex',
+    // flexDirection: 'column',
+    // alignItems: 'center',
+    margin:theme.spacing(2)
   },
-  logo: {
-    width: '170px',
-    height: '180px',
-    marginTop: theme.spacing(7)
+  all: {
+    margin: theme.spacing(4)
   },
-  form: {
-    width: '83%', // Fix IE 11 issue.
-    marginLeft: '18%',
-    marginTop: '3%',
+ 
+  clear: {
+    margin: theme.spacing(3, 0, 2),
+    padding: theme.spacing(1),
+    backgroundColor: '#1A2038',
+    '&:hover': {
+      background: "rgb(87, 95, 126)",
+    },
+  },
+  label: {
+    margin: theme.spacing(2),
+    color: '#1A2038',
+    fontWeight: 'bold',
+    fontSize: 30
   },
   submit: {
-    marginRight: theme.spacing(22),
+    margin: theme.spacing(3, 0, 2),
+    padding: theme.spacing(1),
     background: "#1976d2",
-        '&:hover': {
-            background: "#447fb9",
-        },
+    '&:hover': {
+        background: "#447fb9",
+    },
   },
-  main: {
-    backgroundColor: '#1A2038',
-    height: '650px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  }
 }));
 
 const ChangePassword = () => {
@@ -64,12 +64,8 @@ const ChangePassword = () => {
   }
   return (
     <div className={classes.main}>
-      <Paper className={classes.paper}>
         <Grid container>
-          <Grid item xs={4}>
-            <img src={image} alt="logo" className={classes.logo} />
-          </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={12}>
             <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
                 variant="outlined"
@@ -120,8 +116,6 @@ const ChangePassword = () => {
             </form>
           </Grid>
         </Grid>
-
-      </Paper>
     </div>
   );
 }

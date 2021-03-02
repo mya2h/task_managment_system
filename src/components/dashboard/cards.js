@@ -1,8 +1,9 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import { Button, Dialog, DialogTitle, Typography, Grid, Paper, CardHeader } from '@material-ui/core';
+import { Button,IconButton, Dialog, DialogTitle, Typography, Grid, Paper, CardHeader } from '@material-ui/core';
 import NewTicket from './addTicket'
+import CloseIcon from '@material-ui/icons/Close';
 const useStyles = makeStyles({
   root: {
     margin: 12
@@ -25,7 +26,12 @@ const useStyles = makeStyles({
   },
   table: {
     marginTop: 20
-  }
+  },
+  dialogTitle:{
+    display: 'flex',
+    justifyContent:'space-between',
+    alignItems: 'center'
+}
 });
 const Cards = () => {
   const [open, setOpen] = React.useState(false);
@@ -63,7 +69,11 @@ const Cards = () => {
         </Grid>
       </Grid>
       <Dialog onClose={handleClose} className={classes.modal} aria-labelledby="simple-dialog-title" open={open}>
-        <DialogTitle id="simple-dialog-title">Add New Ticket</DialogTitle>
+        <DialogTitle id="simple-dialog-title">Add New Ticket
+        <IconButton onClick={handleClose} style={{float:'right'}} className={classes.dialogTitle}>
+            <CloseIcon />
+        </IconButton>
+        </DialogTitle>
     <NewTicket/>
     </Dialog>
     </div>
