@@ -131,3 +131,129 @@ export const updateTicket = async (value) =>{
         console.log(err.response)
     }
 }
+
+export const newTicket = async (value) =>{
+    const body = JSON.stringify(value)
+    console.log(body)
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
+        }
+    }
+    try {
+        const res = await axios.get(baseUrl+"/ticket?status=open", config)
+        console.log(res.data)
+        return res.data
+    }
+    catch (err) {
+        console.log(err.response)
+    }
+}
+
+export const ticketProgress = async (value) =>{
+    const body = JSON.stringify(value)
+    console.log(body)
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
+        }
+    }
+    try {
+        const res = await axios.get(baseUrl+"/ticket?status=inprogress", config)
+        console.log(res.data)
+        return res.data
+    }
+    catch (err) {
+        console.log(err.response)
+    }
+}
+
+export const ticketClosed = async (value) =>{
+    const body = JSON.stringify(value)
+    console.log(body)
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
+        }
+    }
+    try {
+        const res = await axios.get(baseUrl+"/ticket?status=closed", config)
+        console.log(res.data)
+        return res.data
+    }
+    catch (err) {
+        console.log(err.response)
+    }
+}
+
+export const older3Day = async (value) =>{
+    const newDay =  new Date(Date.now());
+    var today = newDay.toISOString(); 
+    const olderDay = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) 
+    olderDay.setUTCHours(0, 0, 0, 0); 
+    const dateOlder = olderDay.toISOString()
+    const body = JSON.stringify(value)
+    console.log(body)
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
+        }
+    }
+    try {
+        const res = await axios.get(baseUrl+"/ticket?ticketOpenedDateFrom="+dateOlder+"&ticketOpenedDateTo="+today, config)
+        console.log(res.data)
+        return res.data
+    }
+    catch (err) {
+        console.log(err.response)
+    }
+}
+
+export const closedToday = async () =>{
+    var dateobj = new Date(Date.now()); 
+    dateobj.setUTCHours(0, 0, 0, 0); 
+    var today = dateobj.toISOString(); 
+    var lastDate = new Date(Date.now()); 
+    var datelast = lastDate.toISOString()
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
+        }
+    }
+    try {
+        const res = await axios.get(baseUrl+"/ticket?status=closed&ticketClosedDateFrom="+today+"&ticketClosedDateTo="+datelast, config)
+        console.log(res.data)
+        return res.data
+    }
+    catch (err) {
+        console.log(err.response)
+    }
+}
+export const openedToday = async () =>{
+    var dateobj = new Date(Date.now()); 
+    dateobj.setUTCHours(0, 0, 0, 0); 
+    var today = dateobj.toISOString(); 
+    var lastDate = new Date(Date.now()); 
+    var datelast = lastDate.toISOString()
+
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
+        }
+    }
+    try {
+        const res = await axios.get(baseUrl+"/ticket?ticketOpenedDateFrom="+today+"&ticketOpenedDateTo="+datelast, config)
+        console.log(res.data)
+        return res.data
+    }
+    catch (err) {
+        console.log(err.response)
+    }
+}
+

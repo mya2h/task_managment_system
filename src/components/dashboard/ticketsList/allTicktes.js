@@ -58,17 +58,6 @@ const ALLTickets = () => {
             { title: 'Date', field: 'createdAt'},
             { title: 'Project Type', field: 'projectType' },
         ],
-        data:[
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        ]
     })
     const [data,setData] = useState([])
 

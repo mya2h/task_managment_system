@@ -16,7 +16,7 @@ import Search from '@material-ui/icons/Search';
 import Check from '@material-ui/icons/Check';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import Delete from '@material-ui/icons/Delete'
-
+import {older3Day,updateTicket} from '../../../actions/API'
 const tableIcons = {
   Check: forwardRef((props, ref) => <Check style={{
     color: '#2b94b1'
@@ -50,32 +50,43 @@ const tableIcons = {
 };
 const ThreeDaysPassesTickets = () => {
     
-    const [state,setState] = useState({
-        columns:[
-            { title: 'Class', field: 'class' },
-            { title: 'Director', field: 'dir'},
-            { title: 'Description', field: 'description' },
-            { title: 'Date', field: 'date'},
-            { title: 'Type', field: 'type' },
-        ],
-        data:[
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
-        ]
-    })
+  const [state,setState] = useState({
+    columns:[
+      { title: 'Class', field: 'class' },
+      { title: 'Director', field: 'director'},
+      { title: 'Description', field: 'description' },
+      { title: 'Date', field: 'createdAt'},
+      { title: 'Project Type', field: 'projectType' },
+  ],
+  })
+  const [data,setData] = useState([])
+
+  useEffect(async()=>{
+   const val =  await older3Day()
+   console.log(val)
+   setData(val)
+  },[])
+  const handleProgress = (val)=>{
+    const value={
+      ticketId:val._id,
+      status:"inprogress"
+    }
+    updateTicket(value)
+      console.log(val)
+  }
+  const handleDone = (val)=>{
+    const value={
+      ticketId:val._id,
+      status:"closed"
+    }
+    updateTicket(value)
+  }
     return (
       <MaterialTable
         title="Tickets Older Than Three Days"
         icons={tableIcons}
         columns={state.columns}
-        data={state.data}        
+        data={data}        
         actions={[
           {
             icon: ()=><Button variant="outlined" color="primary" >Progress</Button>,

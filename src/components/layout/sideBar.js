@@ -97,7 +97,7 @@ const SideNav = () => {
             <ListItemText primary="Tickets In Progress" />
           </ListItem>
         </NavLink>
-        <NavLink
+        {/* <NavLink
           to="/admin/Tickets/holdTickets"
            className="Nav_link"
           activeClassName="activeRoute"
@@ -108,7 +108,7 @@ const SideNav = () => {
             </ListItemIcon>
             <ListItemText primary="Tickets On Hold" />
           </ListItem>
-        </NavLink>
+        </NavLink> */}
         <NavLink
           to="/admin/Tickets/closedTickets"
            className="Nav_link"
