@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const SignIn = () => {
+const ChangePassword = () => {
   const [isAuthenticated,setIsAuthenticated] = useState(false)
   const classes = useStyles();
   const [value, setValue] = React.useState({
@@ -53,9 +53,8 @@ const SignIn = () => {
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-    if(authenticate(value)){
-      setIsAuthenticated(true)
-    }
+   authenticate(value)
+    // setIsAuthenticated(true)
     console.log(value)
   }
   if(isAuthenticated){
@@ -72,14 +71,15 @@ const SignIn = () => {
           </Grid>
           <Grid item xs={8}>
             <form className={classes.form} onSubmit={handleSubmit}>
-              <TextField
+            <TextField
                 variant="outlined"
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="User Name"
-                name="email"
+                name="currentPassword"
+                label="Current Password"
+                type="password"
+                id="password"
                 onChange={handleChange}
               />
               <TextField
@@ -88,15 +88,21 @@ const SignIn = () => {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="New Password"
                 type="password"
                 id="password"
                 onChange={handleChange}
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-                style={{ marginRight: '50px' }}
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Confirm Password"
+                type="password"
+                id="password"
+                onChange={handleChange}
               />
               <br />
               {/* <Link to="/admin" style={{ color: 'inherit', textDecoration: 'inherit' }}> */}
@@ -107,7 +113,7 @@ const SignIn = () => {
                   color="primary"
                   className={classes.submit}
                 >
-                  Sign In
+                  Change
           </Button>
               {/* </Link> */}
 
@@ -120,4 +126,4 @@ const SignIn = () => {
   );
 }
 
-export default SignIn
+export default ChangePassword

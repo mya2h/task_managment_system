@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import { TextField,Grid,Typography,Paper } from '@material-ui/core';
 import {Telegram} from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles';
-
+import {register} from '../../actions/API'
 const useStyles = makeStyles(theme => ({
   main: {
     // backgroundColor: '#1A2038',
@@ -56,7 +56,7 @@ const SignUp = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState('')
   const [user, setUser] = React.useState({
-    firstName: '',
+    fullName: '',
     lastName: '',
     userName: '',
     roleType: '',
@@ -76,8 +76,9 @@ const SignUp = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log(user)
+    register(user)
     setUser({
-      firstName: '',
+      fullName: '',
       lastName: '',
       userName: '',
       roleType: '',
@@ -89,7 +90,7 @@ const SignUp = () => {
   }
   const clearData = () => {
     setUser({
-      firstName: '',
+      fullName: '',
       lastName: '',
       userName: '',
       roleType: '',
@@ -110,11 +111,11 @@ const SignUp = () => {
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="fname"
-                name="firstName"
-                value = {user.firstName}
+                name="fullName"
+                value = {user.fullName}
                 required
                 fullWidth
-                id="firstName"
+                id="fullName"
                 label="First Name"
                 onChange={handleChange}
               />
