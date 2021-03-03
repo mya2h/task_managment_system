@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(8),
     paddingLeft: theme.spacing(8),
     paddingBottom: theme.spacing(9),
-    width: '37%',
+    width: '50%',
     borderRadius: '15px'
 
   },

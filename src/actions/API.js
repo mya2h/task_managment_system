@@ -248,7 +248,7 @@ export const openedToday = async () =>{
         }
     }
     try {
-        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?ticketOpenedDateFrom="+today+"&ticketOpenedDateTo="+datelast, config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=open&ticketOpenedDateFrom="+today+"&ticketOpenedDateTo="+datelast, config)
         console.log(res.data)
         return res.data
     }
@@ -256,4 +256,19 @@ export const openedToday = async () =>{
         console.log(err.response)
     }
 }
-
+export const opened = async () =>{
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
+        }
+    }
+    try {
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=open", config)
+        console.log(res.data)
+        return res.data
+    }
+    catch (err) {
+        console.log(err.response)
+    }
+}

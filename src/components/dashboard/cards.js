@@ -4,7 +4,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { Button,IconButton, Dialog, DialogTitle, Typography, Grid, Paper, CardHeader } from '@material-ui/core';
 import NewTicket from './addTicket'
 import CloseIcon from '@material-ui/icons/Close';
-import {getTicket,newTicket,ticketProgress,openedToday} from '../../actions/API'
+import {getTicket,newTicket,ticketProgress,opened} from '../../actions/API'
 import '../../assets/css/sideNav.css'
 const useStyles = makeStyles({
   root: {
@@ -45,7 +45,7 @@ const Cards = () => {
     const val = await getTicket()
     const newt = await newTicket()
     const prog = await ticketProgress()
-    const op = await openedToday()
+    const op = await opened()
     if(op != null){
       setOpent(op.length)
     }

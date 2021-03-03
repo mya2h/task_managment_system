@@ -163,7 +163,9 @@ const NewTicket = () => {
                                 >
                                     <MenuItem value={'demo'}>Demo</MenuItem>
                                     <MenuItem value={'specialProject'}>Special Project</MenuItem>
-                                    <MenuItem value={'marker'}>Marker</MenuItem>
+                                    <MenuItem value={'market'}>Market</MenuItem>
+                                    <MenuItem value={'liveEvent'}>Live Event</MenuItem>
+
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -185,9 +187,12 @@ const NewTicket = () => {
                                     displayEmpty
                                     className={classes.selectEmpty}
                                 >
-                                    <MenuItem value={'1232'}>1232</MenuItem>
-                                    <MenuItem value={'1930'}>1930</MenuItem>
-                                    <MenuItem value={'2020'}>2020</MenuItem>
+                                    <MenuItem value={'SU21'}>SU21</MenuItem>
+                                    <MenuItem value={'FA21'}>FA21</MenuItem>
+                                    <MenuItem value={'WI21'}>WI21</MenuItem>
+                                    <MenuItem value={'SP21'}>SP21</MenuItem>
+                                    <MenuItem value={'FA22'}>FA22</MenuItem>
+                                    <MenuItem value={'SU21'}>SU21</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>

@@ -2,6 +2,7 @@ import React,{useEffect,forwardRef,useState} from 'react'
 import {Button,Card,Grid,Paper,CardHeader  } from '@material-ui/core';
 import MaterialTable from 'material-table';
 import Edit from '@material-ui/icons/Edit';
+import { makeStyles } from '@material-ui/core/styles';
 import FilterList from '@material-ui/icons/FilterList';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
@@ -35,6 +36,7 @@ const tableIcons = {
     color: '#5a98d6',
   }} {...props} ref={ref} />),
   Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+  DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
   Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
   FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
   LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
@@ -48,16 +50,35 @@ const tableIcons = {
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
+const useStyles = makeStyles(theme => ({
+  inable: {
+    background: "blue",
+    '&:hover': {
+      background: "#2491c4",
+    },
+    color: "#fff"
+  },
+  disable: {
+    backgroundColor: 'rgba(177, 171, 171, 0.26)'
+  },
+  detailPage:{
+    marginLeft:theme.spacing(10),
+    marginRight:theme.spacing(10),
+    marginTop:theme.spacing(5),
+    marginBottom:theme.spacing(5),
+    fontSize:16
+  }
+}));
 const ClosedTickets = () => {
-    
+    const classes= useStyles()
     const [state,setState] = useState({
-      columns:[
+      columns: [
         { title: 'Class', field: 'class' },
-        { title: 'Director', field: 'director'},
+        { title: 'Director', field: 'director' },
         { title: 'Description', field: 'description' },
-        { title: 'Date', field: 'createdAt'},
+        { title: 'Status', field: 'status' },
         { title: 'Project Type', field: 'projectType' },
-    ],
+      ],
     })
     const [data,setData] = useState([])
 
@@ -86,7 +107,35 @@ const ClosedTickets = () => {
         title="Closed Tickets"
         icons={tableIcons}
         columns={state.columns}
-        data={data}        
+        data={data}
+        detailPanel={rowData => {
+          return (
+           <div className={classes.detailPage}>
+            <Grid container className={classes.root} spacing={2}>
+            <Grid item xs={6}>
+            Class: {rowData.class}
+            <br/>
+               Director:{rowData.director}
+               <br/>
+               Project Type:{rowData.projectType}
+               <br/>
+               Year:{rowData.year}
+    
+            </Grid>
+            <Grid item xs={6}>
+            Leader:{rowData.leader}
+            <br/>
+               Base Camp:{rowData.baseCamp}
+               <br/>
+               Project Link:{rowData.projectLink}
+               <br/>
+               Description:{rowData.description}
+            </Grid>
+    
+             </Grid>
+           </div>
+          )
+        }}        
       />
     )
   }

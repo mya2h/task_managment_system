@@ -40,6 +40,7 @@ const tableIcons = {
   }} {...props} ref={ref} />),
   Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
   Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+  DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
   FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
   LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
   NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
@@ -48,6 +49,7 @@ const tableIcons = {
   )),
   ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
   Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+  DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
   SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
@@ -63,19 +65,26 @@ const useStyles = makeStyles(theme => ({
 disable: {
     backgroundColor: 'rgba(177, 171, 171, 0.26)'
 },
+detailPage:{
+  marginLeft:theme.spacing(10),
+  marginRight:theme.spacing(10),
+  marginTop:theme.spacing(5),
+  marginBottom:theme.spacing(5),
+  fontSize:16
+}
 }));
 const ProgressTickets = () => {
   const alert = useAlert()
   const history = useHistory()
   const classes = useStyles();
     const [state,setState] = useState({
-      columns:[
+      columns: [
         { title: 'Class', field: 'class' },
-        { title: 'Director', field: 'director'},
+        { title: 'Director', field: 'director' },
         { title: 'Description', field: 'description' },
-        { title: 'Date', field: 'createdAt'},
+        { title: 'Status', field: 'status' },
         { title: 'Project Type', field: 'projectType' },
-    ],
+      ],
         data:[
         { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
         { class: '1000', description: 'describe', date: "12/05/20", type: "data",dir:"placeHolder" },
@@ -129,7 +138,35 @@ const ProgressTickets = () => {
         title="Tickets In Progress"
         icons={tableIcons}
         columns={state.columns}
-        data={data}        
+        data={data}  
+        detailPanel={rowData => {
+          return (
+           <div className={classes.detailPage}>
+            <Grid container className={classes.root} spacing={2}>
+            <Grid item xs={6}>
+            Class: {rowData.class}
+            <br/>
+               Director:{rowData.director}
+               <br/>
+               Project Type:{rowData.projectType}
+               <br/>
+               Year:{rowData.year}
+    
+            </Grid>
+            <Grid item xs={6}>
+            Leader:{rowData.leader}
+            <br/>
+               Base Camp:{rowData.baseCamp}
+               <br/>
+               Project Link:{rowData.projectLink}
+               <br/>
+               Description:{rowData.description}
+            </Grid>
+    
+             </Grid>
+           </div>
+          )
+        }}      
         actions={[
           rowData => (
             {
