@@ -3,7 +3,10 @@ import { TextField,Grid,Button,FormControlLabel,Checkbox,Paper } from '@material
 import image from '../../assets/images/admin.png'
 import { createBrowserHistory } from 'history';
 import {Redirect,useHistory} from 'react-router-dom'
+import axios from 'axios'
+import { useAlert } from "react-alert";
 import { makeStyles } from '@material-ui/core/styles';
+import jwt_decode from "jwt-decode";
 import {authenticate} from '../../actions/API'
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -42,6 +45,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SignIn = () => {
+  const alert = useAlert()
   let history = useHistory();
   const [isAuthenticated,setIsAuthenticated] = useState(false)
   useEffect(()=>{
@@ -58,15 +62,37 @@ const SignIn = () => {
     console.log(e.target.value)
     setValue({ ...value, [e.target.name]: e.target.value })
   }
-  const handleSubmit = (e) => {
-    if(authenticate(value)){
-      setIsAuthenticated(true)
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const body = JSON.stringify(value)
+    console.log(body)
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    try {
+        console.log(process.env.API_URL)
+        const res = await axios.post(process.env.REACT_APP_API_URL+"/user/signin", body, config)
+        console.log(res.data)
+        localStorage.setItem('token',res.data.token)
+        var decoded = jwt_decode(res.data.token);
+        localStorage.setItem('user',decoded._id)
+        localStorage.setItem('userName',decoded.fullName)
+        setIsAuthenticated(true)
+    }
+    catch (err) {
+      if(err.response){
+        alert.error(err.response.data.error,{
+          timeout:2000
+        })
+      }
     }
 
   }
-  if(localStorage.getItem('token')){
+  if(isAuthenticated){
     console.log("got it")
-    // history.push("/admin");
+    history.push("/admin");
    
   }
   return (

@@ -87,18 +87,6 @@ const ClosedTickets = () => {
         icons={tableIcons}
         columns={state.columns}
         data={data}        
-        actions={[
-          {
-            icon: ()=><Button variant="outlined" color="primary" >Progress</Button>,
-            tooltip: 'In progress',
-            onClick: (event, rowData) => handleProgress(rowData)
-          },
-          {
-            icon: ()=><Button variant="outlined" color="secondary">Close</Button>,
-            tooltip: 'Delete User',
-            onClick: (event, rowData) => handleDone(rowData)
-          }
-        ]}
       />
     )
   }

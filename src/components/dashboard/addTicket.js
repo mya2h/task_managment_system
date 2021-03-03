@@ -2,10 +2,12 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { TextField, Grid, FormHelperText, FormControl, InputLabel, MenuItem, Select, Paper } from '@material-ui/core';
 import { CodeSharp, Telegram } from '@material-ui/icons'
-import Notifications, {notify} from 'react-notify-toast';
+import Notifications, { notify } from 'react-notify-toast';
 import { makeStyles } from '@material-ui/core/styles';
-import {addTicket} from '../../actions/API'
+import { addTicket } from '../../actions/API'
 import { store } from 'react-notifications-component';
+import axios from 'axios'
+import { useAlert } from "react-alert";
 const useStyles = makeStyles(theme => ({
     all: {
         margin: theme.spacing(4)
@@ -35,8 +37,8 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 'bold',
         fontSize: 30
     },
-    formControl:{
-        width:"100%"
+    formControl: {
+        width: "100%"
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
@@ -49,7 +51,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const NewTicket = () => {
-   
+    const alert = useAlert()
     const classes = useStyles();
     const userId = localStorage.getItem('user')
     const [value, setValue] = React.useState('')
@@ -61,8 +63,8 @@ const NewTicket = () => {
         leader: '',
         baseCamp: '',
         projectLink: '',
-        description:'',
-        assignedTo:userId
+        description: '',
+        assignedTo: userId
     })
 
     const handleChange = (event) => {
@@ -73,9 +75,30 @@ const NewTicket = () => {
         setticket({ ...ticket, year: event.target.value })
         setValue(event.target.value);
     }
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        addTicket(ticket)
+        const body = JSON.stringify(ticket)
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            }
+        }
+        try {
+            const res = await axios.post(process.env.REACT_APP_API_URL + "/ticket", body, config)
+            alert.success('new ticket added', {
+                timeout: 2000
+            })
+            console.log(res.data)
+        }
+        catch (err) {
+            console.log(err.response)
+            if (err.response) {
+                alert.error(err.response.data.error, {
+                    timeout: 2000
+                })
+            }
+        }
         setticket({
             class: '',
             director: '',
@@ -84,8 +107,8 @@ const NewTicket = () => {
             projectLink: '',
             leader: '',
             baseCamp: '',
-            description:'',
-            assignedTo:userId         
+            description: '',
+            assignedTo: userId
         })
         setValue('')
     }
@@ -131,7 +154,7 @@ const NewTicket = () => {
                                     inputProps={{
                                         name: 'projectType',
                                         id: 'age-native-simple',
-                                      }}
+                                    }}
                                     onChange={handleChange}
                                     displayEmpty
                                     className={classes.selectEmpty}
@@ -155,7 +178,7 @@ const NewTicket = () => {
                                     inputProps={{
                                         name: 'year',
                                         id: 'age-native-simple',
-                                      }}
+                                    }}
                                     onChange={handleChange}
                                     displayEmpty
                                     className={classes.selectEmpty}
@@ -210,13 +233,13 @@ const NewTicket = () => {
                         </Grid>
                     </Grid>
                     <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                            >
-                                <Telegram /> Add
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                    >
+                        <Telegram /> Add
           </Button>
                 </form>
             </Paper>

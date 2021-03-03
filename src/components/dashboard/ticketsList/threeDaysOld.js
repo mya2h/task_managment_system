@@ -8,6 +8,7 @@ import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import Clear from '@material-ui/icons/Clear';
 import BlockIcon from '@material-ui/icons/Block';
+import { makeStyles } from '@material-ui/core/styles';
 import FirstPage from '@material-ui/icons/FirstPage';
 import LastPage from '@material-ui/icons/LastPage';
 import Remove from '@material-ui/icons/Remove';
@@ -48,6 +49,18 @@ const tableIcons = {
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
+const useStyles = makeStyles(theme => ({
+  inable: {
+    background: "blue",
+    '&:hover': {
+        background: "#2491c4",
+    },
+    color: "#fff"
+},
+disable: {
+    backgroundColor: 'rgba(177, 171, 171, 0.26)'
+},
+}));
 const ThreeDaysPassesTickets = () => {
     
   const [state,setState] = useState({
@@ -60,7 +73,7 @@ const ThreeDaysPassesTickets = () => {
   ],
   })
   const [data,setData] = useState([])
-
+  const classes = useStyles()
   useEffect(async()=>{
    const val =  await older3Day()
    console.log(val)
@@ -88,16 +101,24 @@ const ThreeDaysPassesTickets = () => {
         columns={state.columns}
         data={data}        
         actions={[
+          rowData => (
           {
-            icon: ()=><Button variant="outlined" color="primary" >Progress</Button>,
+            icon: ()=><Button className={rowData.status == 'inprogress' 
+              ? classes.disable
+              : classes.inable}>Progress</Button >,
             tooltip: 'In progress',
-            onClick: (event, rowData) => alert("You saved " + rowData.name)
-          },
+            onClick: (event, rowData) => handleProgress(rowData),
+            disabled: rowData.status == 'inprogress'
+          }),
+          rowData => (
           {
-            icon: ()=><Button variant="outlined" color="secondary">Done</Button>,
+            icon: ()=><Button className={rowData.status == 'closed'
+            ? classes.disable
+            : classes.inable} >Close</Button>,
             tooltip: 'Delete User',
-            onClick: (event, rowData) => alert("You want to delete " + rowData.name)
-          }
+            onClick: (event, rowData) => handleDone(rowData),
+            disabled: rowData.status == 'closed'
+          })
         ]}
       />
     )

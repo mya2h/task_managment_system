@@ -85,7 +85,6 @@ export const getUsers = async (value) =>{
 }
 export const addTicket = async (value) =>{
     const body = JSON.stringify(value)
-    console.log(body)
     const config = {
         headers: {
             'Content-Type': 'application/json',

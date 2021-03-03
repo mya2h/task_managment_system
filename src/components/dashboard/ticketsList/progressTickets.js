@@ -6,6 +6,7 @@ import FilterList from '@material-ui/icons/FilterList';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
+import { makeStyles } from '@material-ui/core/styles';
 import Clear from '@material-ui/icons/Clear';
 import BlockIcon from '@material-ui/icons/Block';
 import FirstPage from '@material-ui/icons/FirstPage';
@@ -48,8 +49,20 @@ const tableIcons = {
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
+const useStyles = makeStyles(theme => ({
+  inable: {
+    background: "blue",
+    '&:hover': {
+        background: "#2491c4",
+    },
+    color: "#fff"
+},
+disable: {
+    backgroundColor: 'rgba(177, 171, 171, 0.26)'
+},
+}));
 const ProgressTickets = () => {
-    
+  const classes = useStyles();
     const [state,setState] = useState({
       columns:[
         { title: 'Class', field: 'class' },
@@ -99,16 +112,24 @@ const ProgressTickets = () => {
         columns={state.columns}
         data={data}        
         actions={[
+          rowData => (
           {
-            icon: ()=><Button variant="outlined" color="primary" >Progress</Button>,
+            icon: ()=><Button className={rowData.status == 'inprogress' 
+              ? classes.disable
+              : classes.inable}>Progress</Button >,
             tooltip: 'In progress',
-            onClick: (event, rowData) => handleProgress(rowData)
-          },
+            onClick: (event, rowData) => handleProgress(rowData),
+            disabled: rowData.status == 'inprogress'
+          }),
+          rowData => (
           {
-            icon: ()=><Button variant="outlined" color="secondary">Close</Button>,
+            icon: ()=><Button className={rowData.status == 'closed'
+            ? classes.disable
+            : classes.inable} >Close</Button>,
             tooltip: 'Delete User',
-            onClick: (event, rowData) => handleDone(rowData)
-          }
+            onClick: (event, rowData) => handleDone(rowData),
+            disabled: rowData.status == 'closed'
+          })
         ]}
       />
     )
