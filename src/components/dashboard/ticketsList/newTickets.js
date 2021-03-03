@@ -12,6 +12,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import FirstPage from '@material-ui/icons/FirstPage';
 import LastPage from '@material-ui/icons/LastPage';
 import Remove from '@material-ui/icons/Remove';
+import { useHistory } from 'react-router'
+import axios from 'axios'
+import { useAlert } from 'react-alert'
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import Check from '@material-ui/icons/Check';
@@ -62,6 +65,8 @@ disable: {
 },
 }));
 const NewTickets = () => {
+  const alert = useAlert()
+  const history = useHistory()
   const classes = useStyles();
     const [state,setState] = useState({
       columns:[
@@ -79,21 +84,63 @@ const NewTickets = () => {
      console.log(val)
      setData(val)
     },[newTicket])
-    const handleProgress = (val)=>{
-      const value={
-        ticketId:val._id,
-        status:"inprogress"
+    const handleProgress = async (val) => {
+      const value = {
+        ticketId: val._id,
+        status: "inprogress"
       }
-      updateTicket(value)
-        console.log(val)
-    }
-    const handleDone = (val)=>{
-      const value={
-        ticketId:val._id,
-        status:"closed"
+      const body = JSON.stringify(value)
+      console.log(body)
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('token')
+        }
       }
-      updateTicket(value)
+      try {
+        const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
+        console.log(res.data)
+        alert.success('ticket added to progress',{
+          timeout:2000
+        })
+        history.push('/admin/Tickets/ticketsInProgress');
+      }
+      catch (err) {
+        console.log(err.response)
+        alert.success(err.response.data.error,{
+          timeout:2000
+        })
+      }
     }
+    const handleDone = async(val)=> {
+    const value = {
+      ticketId: val._id,
+      status: "closed"
+    }
+    const body = JSON.stringify(value)
+    console.log(body)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('token')
+      }
+    }
+    try {
+      const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
+      console.log(res.data)
+      alert.success('ticket closed',{
+        timeout:2000
+      })
+      history.push('/admin/Tickets/closedTickets');
+    
+    }
+    catch (err) {
+      console.log(err.response)
+      alert.success(err.response.data.error,{
+        timeout:2000
+      })
+    }
+  }
     return (
       <MaterialTable
         title="New Tickets"
@@ -102,23 +149,23 @@ const NewTickets = () => {
         data={data}        
         actions={[
           rowData => (
-          {
-            icon: ()=><Button className={rowData.status == 'inprogress' 
-              ? classes.disable
-              : classes.inable}>Progress</Button >,
-            tooltip: 'In progress',
-            onClick: (event, rowData) => handleProgress(rowData),
-            disabled: rowData.status == 'inprogress'
-          }),
+            {
+              icon: () => <Button className={rowData.status == 'inprogress' || rowData.status == 'closed'
+                ? classes.disable
+                : classes.inable}>Progress</Button >,
+              tooltip: 'In progress',
+              onClick: (event, rowData) => handleProgress(rowData),
+              disabled: rowData.status == 'inprogress' || rowData.status == 'closed'
+            }),
           rowData => (
-          {
-            icon: ()=><Button className={rowData.status == 'closed'
-            ? classes.disable
-            : classes.inable} >Close</Button>,
-            tooltip: 'Delete User',
-            onClick: (event, rowData) => handleDone(rowData),
-            disabled: rowData.status == 'closed'
-          })
+            {
+              icon: () => <Button className={rowData.status == 'closed'
+                ? classes.disable
+                : classes.inable} >Close</Button>,
+              tooltip: 'Delete User',
+              onClick: (event, rowData) => handleDone(rowData),
+              disabled: rowData.status == 'closed'
+            })
         ]}
       />
     )

@@ -6,6 +6,7 @@ import Notifications, { notify } from 'react-notify-toast';
 import { makeStyles } from '@material-ui/core/styles';
 import { addTicket } from '../../actions/API'
 import { store } from 'react-notifications-component';
+import { useHistory } from 'react-router'
 import axios from 'axios'
 import { useAlert } from "react-alert";
 const useStyles = makeStyles(theme => ({
@@ -51,6 +52,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const NewTicket = () => {
+    const history = useHistory()
     const alert = useAlert()
     const classes = useStyles();
     const userId = localStorage.getItem('user')
@@ -89,7 +91,7 @@ const NewTicket = () => {
             alert.success('new ticket added', {
                 timeout: 2000
             })
-            console.log(res.data)
+            history.push('/admin/Tickets/newTickets');
         }
         catch (err) {
             console.log(err.response)

@@ -1,5 +1,5 @@
-import React,{useEffect,forwardRef,useState} from 'react'
-import {Button,Card,Grid,Paper,CardHeader  } from '@material-ui/core';
+import React, { useEffect, forwardRef, useState } from 'react'
+import { Button, Card, Grid, Paper, CardHeader } from '@material-ui/core';
 import MaterialTable from 'material-table';
 import Edit from '@material-ui/icons/Edit';
 import FilterList from '@material-ui/icons/FilterList';
@@ -15,9 +15,12 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import Check from '@material-ui/icons/Check';
+import { useHistory } from 'react-router'
+import axios from 'axios'
+import { useAlert } from 'react-alert'
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import Delete from '@material-ui/icons/Delete'
-import {getTicket,updateTicket} from '../../../actions/API'
+import { getTicket, updateTicket } from '../../../actions/API'
 const tableIcons = {
   Check: forwardRef((props, ref) => <Check style={{
     color: '#2b94b1'
@@ -53,74 +56,118 @@ const useStyles = makeStyles(theme => ({
   inable: {
     background: "blue",
     '&:hover': {
-        background: "#2491c4",
+      background: "#2491c4",
     },
     color: "#fff"
-},
-disable: {
+  },
+  disable: {
     backgroundColor: 'rgba(177, 171, 171, 0.26)'
-},
+  },
 }));
 const ALLTickets = () => {
+  const alert = useAlert()
+  const history = useHistory()
   const classes = useStyles();
-    const [state,setState] = useState({
-        columns:[
-            { title: 'Class', field: 'class' },
-            { title: 'Director', field: 'director'},
-            { title: 'Description', field: 'description' },
-            { title: 'Date', field: 'createdAt'},
-            { title: 'Project Type', field: 'projectType' },
-        ],
-    })
-    const [data,setData] = useState([])
+  const [state, setState] = useState({
+    columns: [
+      { title: 'Class', field: 'class' },
+      { title: 'Director', field: 'director' },
+      { title: 'Description', field: 'description' },
+      { title: 'Date', field: 'createdAt' },
+      { title: 'Project Type', field: 'projectType' },
+    ],
+  })
+  const [data, setData] = useState([])
 
-    useEffect(async()=>{
-     const val =  await getTicket()
-     console.log(val)
-     setData(val)
-    },[])
-    const handleProgress = (val)=>{
-      const value={
-        ticketId:val._id,
-        status:"inprogress"
-      }
-      updateTicket(value)
-        console.log(val)
+  useEffect(async () => {
+    const val = await getTicket()
+    console.log(val)
+    setData(val)
+  }, [])
+  const handleProgress = async (val) => {
+    const value = {
+      ticketId: val._id,
+      status: "inprogress"
     }
-    const handleDone = (val)=>{
-      const value={
-        ticketId:val._id,
-        status:"closed"
+    const body = JSON.stringify(value)
+    console.log(body)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('token')
       }
-      updateTicket(value)
     }
-    return (
-      <MaterialTable
-        title="All Tickets"
-        icons={tableIcons}
-        columns={state.columns}
-        data={data}        
-        actions={[
-          rowData => (
-          {
-            icon: ()=><Button className={rowData.status == 'inprogress' 
-              ? classes.disable
-              : classes.inable}>Progress</Button >,
-            tooltip: 'In progress',
-            onClick: (event, rowData) => handleProgress(rowData),
-            disabled: rowData.status == 'inprogress'
-          }),
-          rowData => (
-          {
-            icon: ()=><Button className={rowData.status == 'closed'
+    try {
+      const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
+      console.log(res.data)
+      alert.success('ticket added to progress',{
+        timeout:2000
+      })
+      history.push('/admin/Tickets/ticketsInProgress');
+    }
+    catch (err) {
+      console.log(err.response)
+      alert.success(err.response.data.error,{
+        timeout:2000
+      })
+    }
+  }
+  const handleDone = async(val)=> {
+  const value = {
+    ticketId: val._id,
+    status: "closed"
+  }
+  const body = JSON.stringify(value)
+  console.log(body)
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('token')
+    }
+  }
+  try {
+    const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
+    console.log(res.data)
+    alert.success('ticket closed',{
+      timeout:2000
+    })
+    history.push('/admin/Tickets/closedTickets');
+  
+  }
+  catch (err) {
+    console.log(err.response)
+    alert.success(err.response.data.error,{
+      timeout:2000
+    })
+  }
+}
+return (
+  <MaterialTable
+    title="All Tickets"
+    icons={tableIcons}
+    columns={state.columns}
+    data={data}
+    actions={[
+      rowData => (
+        {
+          icon: () => <Button className={rowData.status == 'inprogress' || rowData.status == 'closed'
+            ? classes.disable
+            : classes.inable}>Progress</Button >,
+          tooltip: 'In progress',
+          onClick: (event, rowData) => handleProgress(rowData),
+          disabled: rowData.status == 'inprogress' || rowData.status == 'closed'
+        }),
+      rowData => (
+        {
+          icon: () => <Button className={rowData.status == 'closed'
             ? classes.disable
             : classes.inable} >Close</Button>,
-            tooltip: 'Delete User',
-            onClick: (event, rowData) => handleDone(rowData),
-            disabled: rowData.status == 'closed'
-          })
-        ]}
-      />
-    )
+          tooltip: 'Delete User',
+          onClick: (event, rowData) => handleDone(rowData),
+          disabled: rowData.status == 'closed'
+        })
+    ]}
+  />
+)
   }
 export default ALLTickets

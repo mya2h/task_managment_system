@@ -1,7 +1,6 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import { Button, Dialog, DialogTitle, Typography, Grid, Paper, CardHeader } from '@material-ui/core';
 import {BrowserRouter as Router,Switch,Redirect,Route,} from "react-router-dom";
 import ALLTickets from './ticketsList/allTicktes'
 import ClosedTickets from './ticketsList/closedTickets'

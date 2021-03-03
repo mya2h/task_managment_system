@@ -8,6 +8,9 @@ import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import Clear from '@material-ui/icons/Clear';
 import BlockIcon from '@material-ui/icons/Block';
+import { useHistory } from 'react-router'
+import axios from 'axios'
+import { useAlert } from 'react-alert'
 import { makeStyles } from '@material-ui/core/styles';
 import FirstPage from '@material-ui/icons/FirstPage';
 import LastPage from '@material-ui/icons/LastPage';
@@ -62,7 +65,8 @@ disable: {
 },
 }));
 const ThreeDaysPassesTickets = () => {
-    
+  const alert = useAlert()
+  const history = useHistory()
   const [state,setState] = useState({
     columns:[
       { title: 'Class', field: 'class' },
@@ -79,20 +83,62 @@ const ThreeDaysPassesTickets = () => {
    console.log(val)
    setData(val)
   },[])
-  const handleProgress = (val)=>{
-    const value={
-      ticketId:val._id,
-      status:"inprogress"
+  const handleProgress = async (val) => {
+    const value = {
+      ticketId: val._id,
+      status: "inprogress"
     }
-    updateTicket(value)
-      console.log(val)
+    const body = JSON.stringify(value)
+    console.log(body)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('token')
+      }
+    }
+    try {
+      const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
+      console.log(res.data)
+      alert.success('ticket added to progress',{
+        timeout:2000
+      })
+      history.push('/admin/Tickets/ticketsInProgress');
+    }
+    catch (err) {
+      console.log(err.response)
+      alert.success(err.response.data.error,{
+        timeout:2000
+      })
+    }
   }
-  const handleDone = (val)=>{
-    const value={
-      ticketId:val._id,
-      status:"closed"
+  const handleDone = async(val)=> {
+    const value = {
+      ticketId: val._id,
+      status: "closed"
     }
-    updateTicket(value)
+    const body = JSON.stringify(value)
+    console.log(body)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('token')
+      }
+    }
+    try {
+      const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
+      console.log(res.data)
+      alert.success('ticket closed',{
+        timeout:2000
+      })
+      history.push('/admin/Tickets/closedTickets');
+    
+    }
+    catch (err) {
+      console.log(err.response)
+      alert.success(err.response.data.error,{
+        timeout:2000
+      })
+    }
   }
     return (
       <MaterialTable
@@ -102,23 +148,23 @@ const ThreeDaysPassesTickets = () => {
         data={data}        
         actions={[
           rowData => (
-          {
-            icon: ()=><Button className={rowData.status == 'inprogress' 
-              ? classes.disable
-              : classes.inable}>Progress</Button >,
-            tooltip: 'In progress',
-            onClick: (event, rowData) => handleProgress(rowData),
-            disabled: rowData.status == 'inprogress'
-          }),
+            {
+              icon: () => <Button className={rowData.status == 'inprogress' || rowData.status == 'closed'
+                ? classes.disable
+                : classes.inable}>Progress</Button >,
+              tooltip: 'In progress',
+              onClick: (event, rowData) => handleProgress(rowData),
+              disabled: rowData.status == 'inprogress' || rowData.status == 'closed'
+            }),
           rowData => (
-          {
-            icon: ()=><Button className={rowData.status == 'closed'
-            ? classes.disable
-            : classes.inable} >Close</Button>,
-            tooltip: 'Delete User',
-            onClick: (event, rowData) => handleDone(rowData),
-            disabled: rowData.status == 'closed'
-          })
+            {
+              icon: () => <Button className={rowData.status == 'closed'
+                ? classes.disable
+                : classes.inable} >Close</Button>,
+              tooltip: 'Delete User',
+              onClick: (event, rowData) => handleDone(rowData),
+              disabled: rowData.status == 'closed'
+            })
         ]}
       />
     )

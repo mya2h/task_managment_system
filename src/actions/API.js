@@ -1,12 +1,7 @@
 import axios from 'axios'
-import Notifications, {notify} from 'react-notify-toast';
 import jwt_decode from "jwt-decode";
-import {BrowserRouter as Router,Switch,Redirect,Route,} from "react-router-dom";
-import React, { Fragment } from "react";
-import { store } from 'react-notifications-component';
-import { useHistory } from "react-router-dom";
 require('dotenv').config()
-const baseUrl = "http://localhost:4000/api"
+
 
 export const register = async (value) => {
     
@@ -19,7 +14,7 @@ export const register = async (value) => {
         }
     }
     try {
-        const res = await axios.post(baseUrl+"/user", body, config)
+        const res = await axios.post(process.env.REACT_APP_API_URL+"/user", body, config)
         console.log(res.data)
     }
     catch (err) {
@@ -27,7 +22,7 @@ export const register = async (value) => {
     }
 }
 export const authenticate = async (value) =>{   
-    console.log(baseUrl)
+    console.log(process.env.REACT_APP_API_URL)
     const body = JSON.stringify(value)
     console.log(body)
     const config = {
@@ -37,7 +32,7 @@ export const authenticate = async (value) =>{
     }
     try {
         console.log(process.env.API_URL)
-        const res = await axios.post(baseUrl+"/user/signin", body, config)
+        const res = await axios.post(process.env.REACT_APP_API_URL+"/user/signin", body, config)
         console.log(res.data)
         localStorage.setItem('token',res.data.token)
         var decoded = jwt_decode(res.data.token);
@@ -59,7 +54,7 @@ export const changePassword = async (value) =>{
         }
     }
     try {
-        const res = await axios.post(baseUrl+"/user/account", body, config)
+        const res = await axios.post(process.env.REACT_APP_API_URL+"/user/account", body, config)
         console.log(res.data)
     }
     catch (err) {
@@ -76,7 +71,7 @@ export const getUsers = async (value) =>{
         }
     }
     try {
-        const res = await axios.get(baseUrl+"/user", body, config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/user", body, config)
         console.log(res.data)
     }
     catch (err) {
@@ -92,7 +87,7 @@ export const addTicket = async (value) =>{
         }
     }
     try {
-        const res = await axios.post(baseUrl+"/ticket", body, config)
+        const res = await axios.post(process.env.REACT_APP_API_URL+"/ticket", body, config)
         getTicket()
         newTicket()
         ticketProgress()
@@ -113,7 +108,7 @@ export const getTicket = async () =>{
         }
     }
     try {
-        const res = await axios.get(baseUrl+"/ticket", config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket", config)
         console.log(res.data)
         return res.data
     }
@@ -131,7 +126,7 @@ export const updateTicket = async (value) =>{
         }
     }
     try {
-        const res = await axios.put(baseUrl+"/ticket", body, config)
+        const res = await axios.put(process.env.REACT_APP_API_URL+"/ticket", body, config)
         console.log(res.data)
     }
     catch (err) {
@@ -147,7 +142,7 @@ export const newTicket = async () =>{
         }
     }
     try {
-        const res = await axios.get(baseUrl+"/ticket?status=open", config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=open", config)
         console.log(res.data)
         return res.data
     }
@@ -166,7 +161,7 @@ export const ticketProgress = async (value) =>{
         }
     }
     try {
-        const res = await axios.get(baseUrl+"/ticket?status=inprogress", config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=inprogress", config)
         console.log(res.data)
         return res.data
     }
@@ -185,7 +180,7 @@ export const ticketClosed = async (value) =>{
         }
     }
     try {
-        const res = await axios.get(baseUrl+"/ticket?status=closed", config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=closed", config)
         console.log(res.data)
         return res.data
     }
@@ -209,7 +204,7 @@ export const older3Day = async (value) =>{
         }
     }
     try {
-        const res = await axios.get(baseUrl+"/ticket?ticketOpenedDateFrom="+dateOlder+"&ticketOpenedDateTo="+today, config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?ticketOpenedDateFrom="+dateOlder+"&ticketOpenedDateTo="+today, config)
         console.log(res.data)
         return res.data
     }
@@ -231,7 +226,7 @@ export const closedToday = async () =>{
         }
     }
     try {
-        const res = await axios.get(baseUrl+"/ticket?status=closed&ticketClosedDateFrom="+today+"&ticketClosedDateTo="+datelast, config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=closed&ticketClosedDateFrom="+today+"&ticketClosedDateTo="+datelast, config)
         console.log(res.data)
         return res.data
     }
@@ -253,7 +248,7 @@ export const openedToday = async () =>{
         }
     }
     try {
-        const res = await axios.get(baseUrl+"/ticket?ticketOpenedDateFrom="+today+"&ticketOpenedDateTo="+datelast, config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?ticketOpenedDateFrom="+today+"&ticketOpenedDateTo="+datelast, config)
         console.log(res.data)
         return res.data
     }
