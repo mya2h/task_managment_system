@@ -220,11 +220,11 @@ const Landing = () => {
   }
   const openNotification = Boolean(anchorNotification);
   const id = openNotification ? 'simple-popover' : undefined;
-  // if(isAuthenticated == false){
-  //   return(
-  //     <Redirect to = "/"/>
-  //   )
-  // }
+  if(isAuthenticated == false){
+    return(
+      <Redirect to = "/"/>
+    )
+  }
 
   return (
     <div className={classes.root}>

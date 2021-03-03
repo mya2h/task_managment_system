@@ -5,9 +5,11 @@ import {Telegram} from '@material-ui/icons'
 import Notifications, { notify } from 'react-notify-toast';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios'
 import CloseIcon from '@material-ui/icons/Close';
 import {register} from '../../actions/API'
 import ChangePassword from './changePassword'
+import { useAlert } from 'react-alert'
 const useStyles = makeStyles(theme => ({
   main: {
     margin:theme.spacing(3)
@@ -54,16 +56,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SignUp = () => {
+  const alert = useAlert()
   const classes = useStyles();
   const [value, setValue] = React.useState('')
   const [user, setUser] = React.useState({
     fullName: '',
-    lastName: '',
-    userName: '',
-    roleType: '',
     email: '',
     password: '',
-    confirm_password: ''
   })
 
   const handleChange = (event) => {
@@ -74,17 +73,36 @@ const SignUp = () => {
     setUser({ ...user, roleType: event.target.value })
     setValue(event.target.value);
   }
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     console.log(user)
-    register(user)
+    const body = JSON.stringify(user)
+    console.log(localStorage.getItem('token'))
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
+        }
+    }
+    try {
+        const res = await axios.post(process.env.REACT_APP_API_URL+"/user", body, config)
+        alert.success('new user added',{
+          timeout:2000
+        })
+    }
+    catch (err) {
+      if(err.response){
+        alert.error(err.response.data.error,{
+          timeout:2000
+        })
+      }
+    }
     setUser({
       fullName: '',
       email: '',
       password: ''
     })
-    setValue('')
-    notify.show("Connection Error !", "error");
+    
   }
   const clearData = () => {
     setUser({

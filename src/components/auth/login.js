@@ -59,21 +59,16 @@ const SignIn = () => {
     setValue({ ...value, [e.target.name]: e.target.value })
   }
   const handleSubmit = (e) => {
-    authenticate(value)
-    
-    setIsAuthenticated(true)
-  }
-  if(isAuthenticated){
-    return(
-      <Redirect to="/admin"/>
-    )
-  }
+    if(authenticate(value)){
+      setIsAuthenticated(true)
+    }
 
-  // if(localStorage.getItem('token')){
-  //   console.log("got it")
-  //   history.push("/admin");
+  }
+  if(localStorage.getItem('token')){
+    console.log("got it")
+    // history.push("/admin");
    
-  // }
+  }
   return (
     <div className={classes.main}>
       <Paper className={classes.paper}>

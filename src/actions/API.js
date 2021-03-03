@@ -3,13 +3,13 @@ import Notifications, {notify} from 'react-notify-toast';
 import jwt_decode from "jwt-decode";
 import {BrowserRouter as Router,Switch,Redirect,Route,} from "react-router-dom";
 import React, { Fragment } from "react";
-import { useAlert } from "react-alert";
 import { store } from 'react-notifications-component';
 import { useHistory } from "react-router-dom";
 require('dotenv').config()
 const baseUrl = "http://localhost:4000/api"
 
 export const register = async (value) => {
+    
     const body = JSON.stringify(value)
     console.log(localStorage.getItem('token'))
     const config = {
@@ -26,8 +26,7 @@ export const register = async (value) => {
         console.log(err.response)
     }
 }
-export const authenticate = async (value) =>{
-    
+export const authenticate = async (value) =>{   
     console.log(baseUrl)
     const body = JSON.stringify(value)
     console.log(body)
@@ -44,7 +43,6 @@ export const authenticate = async (value) =>{
         var decoded = jwt_decode(res.data.token);
         localStorage.setItem('user',decoded._id)
         localStorage.setItem('userName',decoded.fullName)
-      
     }
     catch (err) {
         // alert(err.response.data)

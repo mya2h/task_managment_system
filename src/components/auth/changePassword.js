@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { TextField,Grid,Button,FormControlLabel,Checkbox,Paper } from '@material-ui/core';
 import image from '../../assets/images/admin.png'
 import {Redirect} from 'react-router'
+import axios from 'axios'
+import { useAlert } from "react-alert";
 import { makeStyles } from '@material-ui/core/styles';
 import {changePassword} from '../../actions/API'
 const useStyles = makeStyles(theme => ({
@@ -41,6 +43,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ChangePassword = () => {
+  const alert = useAlert()
   const [isAuthenticated,setIsAuthenticated] = useState(false)
   const classes = useStyles();
   const [value, setValue] = React.useState({
@@ -51,17 +54,37 @@ const ChangePassword = () => {
     console.log(e.target.value)
     setValue({ ...value, [e.target.name]: e.target.value })
   }
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    changePassword(value)
-    // setIsAuthenticated(true)
-    console.log(value)
+    const body = JSON.stringify(value)
+    console.log(body)
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
+        }
+    }
+    try {
+        const res = await axios.post(process.env.REACT_APP_API_URL+"/user/account", body, config)
+        alert.success('password changed',{
+          timeout:2000
+        })
+    }
+    catch (err) {
+        console.log(err.response.data.error)
+        if(err.response){
+          alert.error(err.response.data.error,{
+            timeout:2000
+          })
+        }
+    }
+    setValue({
+      currentPassword:'',
+      newPassword:''
+    })
+    setValue('')
   }
-  if(isAuthenticated){
-    return(
-      <Redirect to="/admin"/>
-    )
-  }
+  
   return (
     <div className={classes.main}>
         <Grid container>
@@ -89,19 +112,6 @@ const ChangePassword = () => {
                 id="password"
                 onChange={handleChange}
               />
-              {/* <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Confirm Password"
-                type="password"
-                id="password"
-                onChange={handleChange}
-              /> */}
-              <br />
-              {/* <Link to="/admin" style={{ color: 'inherit', textDecoration: 'inherit' }}> */}
                 <Button
                   type="submit"
                   // fullWidth
