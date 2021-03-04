@@ -6,11 +6,11 @@ require('dotenv').config()
 export const register = async (value) => {
     
     const body = JSON.stringify(value)
-    console.log(localStorage.getItem('token'))
+    console.log(localStorage.getItem('ticket-token'))
     const config = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
+            'Authorization': localStorage.getItem('ticket-token')
         }
     }
     try {
@@ -34,7 +34,7 @@ export const authenticate = async (value) =>{
         console.log(process.env.API_URL)
         const res = await axios.post(process.env.REACT_APP_API_URL+"/user/signin", body, config)
         console.log(res.data)
-        localStorage.setItem('token',res.data.token)
+        localStorage.setItem('ticket-token',res.data.token)
         var decoded = jwt_decode(res.data.token);
         localStorage.setItem('user',decoded._id)
         localStorage.setItem('userName',decoded.fullName)
@@ -50,7 +50,7 @@ export const changePassword = async (value) =>{
     const config = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
+            'Authorization': localStorage.getItem('ticket-token')
         }
     }
     try {
@@ -67,7 +67,7 @@ export const getUsers = async (value) =>{
     const config = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
+            'Authorization': localStorage.getItem('ticket-token')
         }
     }
     try {
@@ -83,7 +83,7 @@ export const addTicket = async (value) =>{
     const config = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
+            'Authorization': localStorage.getItem('ticket-token')
         }
     }
     try {
@@ -104,7 +104,7 @@ export const getTicket = async () =>{
     const config = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
+            'Authorization': localStorage.getItem('ticket-token')
         }
     }
     try {
@@ -122,7 +122,7 @@ export const updateTicket = async (value) =>{
     const config = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
+            'Authorization': localStorage.getItem('ticket-token')
         }
     }
     try {
@@ -138,7 +138,7 @@ export const newTicket = async () =>{
     const config = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
+            'Authorization': localStorage.getItem('ticket-token')
         }
     }
     try {
@@ -157,7 +157,7 @@ export const ticketProgress = async (value) =>{
     const config = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
+            'Authorization': localStorage.getItem('ticket-token')
         }
     }
     try {
@@ -176,7 +176,7 @@ export const ticketClosed = async (value) =>{
     const config = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
+            'Authorization': localStorage.getItem('ticket-token')
         }
     }
     try {
@@ -200,7 +200,7 @@ export const older3Day = async (value) =>{
     const config = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
+            'Authorization': localStorage.getItem('ticket-token')
         }
     }
     try {
@@ -222,7 +222,7 @@ export const closedToday = async () =>{
     const config = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
+            'Authorization': localStorage.getItem('ticket-token')
         }
     }
     try {
@@ -244,7 +244,7 @@ export const openedToday = async () =>{
     const config = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
+            'Authorization': localStorage.getItem('ticket-token')
         }
     }
     try {
@@ -260,7 +260,7 @@ export const opened = async () =>{
     const config = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
+            'Authorization': localStorage.getItem('ticket-token')
         }
     }
     try {

@@ -77,11 +77,11 @@ const SignUp = () => {
     e.preventDefault()
     console.log(user)
     const body = JSON.stringify(user)
-    console.log(localStorage.getItem('token'))
+    console.log(localStorage.getItem('ticket-token'))
     const config = {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
+            'Authorization': localStorage.getItem('ticket-token')
         }
     }
     try {

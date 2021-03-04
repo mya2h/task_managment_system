@@ -75,9 +75,10 @@ const SignIn = () => {
         console.log(process.env.API_URL)
         const res = await axios.post(process.env.REACT_APP_API_URL+"/user/signin", body, config)
         console.log(res.data)
-        localStorage.setItem('token',res.data.token)
+        localStorage.setItem('ticket-token',res.data.token)
         var decoded = jwt_decode(res.data.token);
         localStorage.setItem('user',decoded._id)
+        localStorage.setItem('role',decoded.role)
         localStorage.setItem('userName',decoded.fullName)
         setIsAuthenticated(true)
     }

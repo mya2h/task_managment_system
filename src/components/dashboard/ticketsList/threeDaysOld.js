@@ -101,7 +101,7 @@ const ThreeDaysPassesTickets = () => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('token')
+        'Authorization': localStorage.getItem('ticket-token')
       }
     }
     try {
@@ -129,7 +129,7 @@ const ThreeDaysPassesTickets = () => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('token')
+        'Authorization': localStorage.getItem('ticket-token')
       }
     }
     try {

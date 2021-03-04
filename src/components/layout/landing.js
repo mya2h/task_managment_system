@@ -160,7 +160,7 @@ const notificationOpts = {
 const Landing = () => {
   const [isAuthenticated,setIsAuthenticated] = useState(true)
   useEffect(()=>{
-    if(localStorage.getItem('token') == null){
+    if(localStorage.getItem('ticket-token') == null){
       setIsAuthenticated(false)
     }
   })
@@ -215,7 +215,7 @@ const Landing = () => {
     setAnchorNotififcation(null);
   };
   const handleLogout = ()=>{
-    localStorage.removeItem('token')
+    localStorage.removeItem('ticket-token')
     setIsAuthenticated(false)
   }
   const openNotification = Boolean(anchorNotification);
