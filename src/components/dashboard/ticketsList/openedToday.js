@@ -10,6 +10,11 @@ import Clear from '@material-ui/icons/Clear';
 import { makeStyles } from '@material-ui/core/styles';
 import BlockIcon from '@material-ui/icons/Block';
 import FirstPage from '@material-ui/icons/FirstPage';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 import LastPage from '@material-ui/icons/LastPage';
 import Remove from '@material-ui/icons/Remove';
 import { useHistory } from 'react-router'
@@ -71,6 +76,9 @@ detailPage:{
 disable: {
     backgroundColor: 'rgba(177, 171, 171, 0.26)'
 },
+formControl:{
+  width:"70%"
+}
 }));
 const OpenedTodayTickets = () => {
   const alert = useAlert()
@@ -86,69 +94,72 @@ const OpenedTodayTickets = () => {
       ],
     })
     const [data,setData] = useState([])
-
+    const [ticketStatus,setStatus] = useState('')
     useEffect(async()=>{
      const val =  await openedToday()
      console.log(val)
      setData(val)
     },[])
-    const handleProgress = async (val) => {
-      const value = {
-        ticketId: val._id,
-        status: "inprogress"
-      }
-      const body = JSON.stringify(value)
-      console.log(body)
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': localStorage.getItem('ticket-token')
+    const handleChange = async(event,id) => {
+      setStatus(event.target.value)
+      if(event.target.value == "progress"){
+        const value = {
+          ticketId: id,
+          status: "inprogress"
+        }
+        const body = JSON.stringify(value)
+        console.log(body)
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('ticket-token')
+          }
+        }
+        try {
+          const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
+          console.log(res.data)
+          alert.success('ticket added to progress',{
+            timeout:2000
+          })
+          history.push('/admin/Tickets/ticketsInProgress');
+        }
+        catch (err) {
+          console.log(err.response)
+          alert.success(err.response.data.error,{
+            timeout:2000
+          })
         }
       }
-      try {
-        const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
-        console.log(res.data)
-        alert.success('ticket added to progress',{
-          timeout:2000
-        })
-        history.push('/admin/Tickets/ticketsInProgress');
+      if(event.target.value == "close"){
+        const value = {
+          ticketId: id,
+          status: "closed"
+        }
+        const body = JSON.stringify(value)
+        console.log(body)
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('ticket-token')
+          }
+        }
+        try {
+          const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
+          console.log(res.data)
+          alert.success('ticket closed',{
+            timeout:2000
+          })
+          history.push('/admin/Tickets/closedTickets');
+        
+        }
+        catch (err) {
+          console.log(err.response)
+          alert.success(err.response.data.error,{
+            timeout:2000
+          })
+        }
       }
-      catch (err) {
-        console.log(err.response)
-        alert.success(err.response.data.error,{
-          timeout:2000
-        })
-      }
-    }
-    const handleDone = async(val)=> {
-    const value = {
-      ticketId: val._id,
-      status: "closed"
-    }
-    const body = JSON.stringify(value)
-    console.log(body)
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('ticket-token')
-      }
-    }
-    try {
-      const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
-      console.log(res.data)
-      alert.success('ticket closed',{
-        timeout:2000
-      })
-      history.push('/admin/Tickets/closedTickets');
-    
-    }
-    catch (err) {
-      console.log(err.response)
-      alert.success(err.response.data.error,{
-        timeout:2000
-      })
-    }
-  }
+    };
     return (
       <MaterialTable
         title="Tickets Opened Today"
@@ -159,6 +170,31 @@ const OpenedTodayTickets = () => {
           return (
            <div className={classes.detailPage}>
             <Grid container className={classes.root} spacing={2}>
+            <Grid item xs={6}>
+          <FormControl className={classes.formControl}>
+        <InputLabel id="demo-controlled-open-select-label">Change Ticket Status</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          onChange={(e)=>handleChange(e,rowData._id)}
+        >
+          <MenuItem value='progress'>Progress</MenuItem>
+          <MenuItem value='close'>Close</MenuItem>
+        </Select>
+      </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+          <FormControl className={classes.formControl}>
+        <InputLabel id="demo-controlled-open-select-label">Assign User</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+        >
+          <MenuItem value='progress'>Abebe</MenuItem>
+          <MenuItem value='close'>Alemu</MenuItem>
+        </Select>
+      </FormControl>
+          </Grid>
             <Grid item xs={6}>
             Class: {rowData.class}
             <br/>
@@ -183,26 +219,6 @@ const OpenedTodayTickets = () => {
            </div>
           )
         }}       
-        actions={[
-          rowData => (
-            {
-              icon: () => <Button className={rowData.status == 'inprogress' || rowData.status == 'closed'
-                ? classes.disable
-                : classes.inable}>Progress</Button >,
-              tooltip: 'In progress',
-              onClick: (event, rowData) => handleProgress(rowData),
-              disabled: rowData.status == 'inprogress' || rowData.status == 'closed'
-            }),
-          rowData => (
-            {
-              icon: () => <Button className={rowData.status == 'closed'
-                ? classes.disable
-                : classes.inable} >Close</Button>,
-              tooltip: 'Delete User',
-              onClick: (event, rowData) => handleDone(rowData),
-              disabled: rowData.status == 'closed'
-            })
-        ]}
       />
     )
   }

@@ -121,7 +121,9 @@ const SignUp = () => {
   };
   return (
     <div className={classes.main}>
-        <Button onClick={handleOpen} style={{ float: "right" }} variant="contained" size="medium" color="primary">
+        {localStorage.getItem('role')== "admin" &&(
+          <div>
+                    <Button onClick={handleOpen} style={{ float: "right" }} variant="contained" size="medium" color="primary">
         Change Password
         </Button>
         <br/>
@@ -129,71 +131,81 @@ const SignUp = () => {
         <Typography component="h1" variant="h5" className={classes.label}>
           Register User
         </Typography>
-        <form className={classes.form} onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="fname"
-                name="fullName"
-                value = {user.fullName}
-                required
-                fullWidth
-                id="fullName"
-                label="Full Name"
-                onChange={handleChange}
-              />
+            <form className={classes.form} onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  autoComplete="fname"
+                  name="fullName"
+                  value = {user.fullName}
+                  required
+                  fullWidth
+                  id="fullName"
+                  label="Full Name"
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  type="email" 
+                  label="Email Address"
+                  value = {user.email}
+                  name="email"
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  pattern=".{5,15}"
+                  value = {user.password}
+                  type="password"
+                  id="password"
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  <Telegram /> Register
+            </Button>
+              </Grid>
+              <Grid item xs={2}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.clear}
+                  onClick={clearData}
+                >
+                  <Telegram /> Clear
+            </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                type="email" 
-                label="Email Address"
-                value = {user.email}
-                name="email"
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                pattern=".{5,15}"
-                value = {user.password}
-                type="password"
-                id="password"
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={2}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-              >
-                <Telegram /> Register
-          </Button>
-            </Grid>
-            <Grid item xs={2}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.clear}
-                onClick={clearData}
-              >
-                <Telegram /> Clear
-          </Button>
-            </Grid>
-          </Grid>
-        </form>
+          </form>
       </Paper>
+      </div>
+              )}
+              {localStorage.getItem('role') != "admin"&&(
+                <Paper className={classes.paper}>
+                  <Typography component="h1" variant="h5" className={classes.label}>
+          Change Password
+        </Typography>
+                    <ChangePassword/>
+                </Paper>
+              )}
       <Dialog onClose={handleClose} className={classes.modal} aria-labelledby="simple-dialog-title" open={open}>
         <DialogTitle id="simple-dialog-title">Change Password
         <IconButton onClick={handleClose} style={{float:'right'}} className={classes.dialogTitle}>

@@ -12,6 +12,11 @@ import BlockIcon from '@material-ui/icons/Block';
 import FirstPage from '@material-ui/icons/FirstPage';
 import LastPage from '@material-ui/icons/LastPage';
 import Remove from '@material-ui/icons/Remove';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import Check from '@material-ui/icons/Check';
@@ -70,6 +75,9 @@ const useStyles = makeStyles(theme => ({
     marginTop:theme.spacing(5),
     marginBottom:theme.spacing(5),
     fontSize:16
+  },
+  formControl:{
+    width:"70%"
   }
 }));
 const ALLTickets = () => {
@@ -86,15 +94,18 @@ const ALLTickets = () => {
     ],
   })
   const [data, setData] = useState([])
-
+  const [ticketStatus,setStatus] = useState('')
   useEffect(async () => {
     const val = await getTicket()
     console.log(val)
     setData(val)
   }, [])
-  const handleProgress = async (val) => {
+
+const handleChange = async(event,id) => {
+  setStatus(event.target.value)
+  if(event.target.value == "progress"){
     const value = {
-      ticketId: val._id,
+      ticketId: id,
       status: "inprogress"
     }
     const body = JSON.stringify(value)
@@ -120,36 +131,39 @@ const ALLTickets = () => {
       })
     }
   }
-  const handleDone = async(val)=> {
-  const value = {
-    ticketId: val._id,
-    status: "closed"
-  }
-  const body = JSON.stringify(value)
-  console.log(body)
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': localStorage.getItem('ticket-token')
+  if(event.target.value == "close"){
+    const value = {
+      ticketId: id,
+      status: "closed"
+    }
+    const body = JSON.stringify(value)
+    console.log(body)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('ticket-token')
+      }
+    }
+    try {
+      const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
+      console.log(res.data)
+      alert.success('ticket closed',{
+        timeout:2000
+      })
+      history.push('/admin/Tickets/closedTickets');
+    
+    }
+    catch (err) {
+      console.log(err.response)
+      alert.success(err.response.data.error,{
+        timeout:2000
+      })
     }
   }
-  try {
-    const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
-    console.log(res.data)
-    alert.success('ticket closed',{
-      timeout:2000
-    })
-    history.push('/admin/Tickets/closedTickets');
-  
-  }
-  catch (err) {
-    console.log(err.response)
-    alert.success(err.response.data.error,{
-      timeout:2000
-    })
-  }
-}
+};
 return (
+  <div>
+              
   <MaterialTable
     title="All Tickets"
     icons={tableIcons}
@@ -158,7 +172,33 @@ return (
     detailPanel={rowData => {
       return (
        <div className={classes.detailPage}>
+
         <Grid container className={classes.root} spacing={2}>
+          <Grid item xs={6}>
+          <FormControl className={classes.formControl}>
+        <InputLabel id="demo-controlled-open-select-label">Change Ticket Status</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          onChange={(e)=>handleChange(e,rowData._id)}
+        >
+          <MenuItem value='progress'>Progress</MenuItem>
+          <MenuItem value='close'>Close</MenuItem>
+        </Select>
+      </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+          <FormControl className={classes.formControl}>
+        <InputLabel id="demo-controlled-open-select-label">Assign User</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+        >
+          <MenuItem value='progress'>Abebe</MenuItem>
+          <MenuItem value='close'>Alemu</MenuItem>
+        </Select>
+      </FormControl>
+          </Grid>
         <Grid item xs={6}>
         Class: {rowData.class}
         <br/>
@@ -183,29 +223,30 @@ return (
        </div>
       )
     }}
-    actions={[
-      rowData => (
-        {
-          icon: () => <Button className={rowData.status == 'inprogress' || rowData.status == 'closed'
-            ? classes.disable
-            : classes.inable}>Progress</Button >,
-          tooltip: 'In progress',
-          onClick: (event, rowData) => handleProgress(rowData),
-          disabled: rowData.status == 'inprogress' || rowData.status == 'closed'
-        }),
-      rowData => (
-        {
-          icon: () => <Button className={rowData.status == 'closed'
-            ? classes.disable
-            : classes.inable} >Close</Button>,
-          tooltip: 'Delete User',
-          onClick: (event, rowData) => handleDone(rowData),
-          disabled: rowData.status == 'closed'
-        })
+    // actions={[
+    //   rowData => (
+    //     {
+    //       icon: () => <Button className={rowData.status == 'inprogress' || rowData.status == 'closed'
+    //         ? classes.disable
+    //         : classes.inable}>Progress</Button >,
+    //       tooltip: 'In progress',
+    //       onClick: (event, rowData) => handleProgress(rowData),
+    //       disabled: rowData.status == 'inprogress' || rowData.status == 'closed'
+    //     }),
+    //   rowData => (
+    //     {
+    //       icon: () => <Button className={rowData.status == 'closed'
+    //         ? classes.disable
+    //         : classes.inable} >Close</Button>,
+    //       tooltip: 'Delete User',
+    //       onClick: (event, rowData) => handleDone(rowData),
+    //       disabled: rowData.status == 'closed'
+    //     })
 
-    ]}
+    // ]}
    
   />
+    </div>
 )
   }
 export default ALLTickets

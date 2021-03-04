@@ -49,7 +49,7 @@ const SignIn = () => {
   let history = useHistory();
   const [isAuthenticated,setIsAuthenticated] = useState(false)
   useEffect(()=>{
-    if(localStorage.getItem('token')){
+    if(localStorage.getItem('ticket-token')){
       setIsAuthenticated(true)
     }
   })
@@ -74,11 +74,11 @@ const SignIn = () => {
     try {
         console.log(process.env.API_URL)
         const res = await axios.post(process.env.REACT_APP_API_URL+"/user/signin", body, config)
-        console.log(res.data)
         localStorage.setItem('ticket-token',res.data.token)
         var decoded = jwt_decode(res.data.token);
         localStorage.setItem('user',decoded._id)
         localStorage.setItem('role',decoded.role)
+        console.log(decoded)
         localStorage.setItem('userName',decoded.fullName)
         setIsAuthenticated(true)
     }
