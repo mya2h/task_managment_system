@@ -25,7 +25,7 @@ import Search from '@material-ui/icons/Search';
 import Check from '@material-ui/icons/Check';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import Delete from '@material-ui/icons/Delete'
-import {newTicket,updateTicket} from '../../../actions/API'
+import {newTicket,getUsers} from '../../../actions/API'
 const tableIcons = {
   Check: forwardRef((props, ref) => <Check style={{
     color: '#2b94b1'
@@ -94,12 +94,15 @@ const NewTickets = () => {
       ],
     })
     const [data,setData] = useState([])
+    const [user,setUser] = useState([])
     const [ticketStatus,setStatus] = useState('')
     useEffect(async()=>{
      const val =  await newTicket()
-     console.log(val)
-     setData(val)
-    },[newTicket])
+     const userVal = await getUsers()
+    console.log(userVal)
+    setData(val)
+    setUser(userVal)
+    },[])
     const handleChange = async(event,id) => {
       setStatus(event.target.value)
       if(event.target.value == "progress"){
@@ -121,7 +124,8 @@ const NewTickets = () => {
           alert.success('ticket added to progress',{
             timeout:2000
           })
-          history.push('/admin/Tickets/ticketsInProgress');
+          history.push('/temp');
+          history.goBack();
         }
         catch (err) {
           console.log(err.response)
@@ -149,7 +153,8 @@ const NewTickets = () => {
           alert.success('ticket closed',{
             timeout:2000
           })
-          history.push('/admin/Tickets/closedTickets');
+          history.push('/temp');
+          history.goBack();
         
         }
         catch (err) {
@@ -160,6 +165,36 @@ const NewTickets = () => {
         }
       }
     };
+    const handleUser = async(e,id)=>{
+      const value = {
+        ticketId: id,
+        userId: e.target.value._id
+      }
+      const body = JSON.stringify(value)
+      console.log(body)
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('ticket-token')
+        }
+      }
+      try {
+        const res = await axios.post(process.env.REACT_APP_API_URL + "/ticket/assign", body, config)
+        console.log(res.data)
+        alert.success(`ticket assigned to email${e.target.value.email}`,{
+          timeout:3000
+        })
+        history.push('/temp');
+        history.goBack();
+      
+      }
+      catch (err) {
+        console.log(err.response)
+        alert.success(err.response.data.error,{
+          timeout:3000
+        })
+      }
+    }
     return (
       <MaterialTable
         title="New Tickets"
@@ -189,9 +224,13 @@ const NewTickets = () => {
         <Select
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
+          onChange={(e)=>handleUser(e,rowData._id)}
         >
-          <MenuItem value='progress'>Abebe</MenuItem>
-          <MenuItem value='close'>Alemu</MenuItem>
+          {
+            user.map(data=>(
+              <MenuItem value={data}>{data.email}</MenuItem>
+            ))
+          }
         </Select>
       </FormControl>
           </Grid>

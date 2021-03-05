@@ -25,7 +25,7 @@ import axios from 'axios'
 import { useAlert } from 'react-alert'
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import Delete from '@material-ui/icons/Delete'
-import { getTicket, updateTicket } from '../../../actions/API'
+import { getTicket, getUsers } from '../../../actions/API'
 const tableIcons = {
   Check: forwardRef((props, ref) => <Check style={{
     color: '#2b94b1'
@@ -94,11 +94,14 @@ const ALLTickets = () => {
     ],
   })
   const [data, setData] = useState([])
+  const [user,setUser] = useState([])
   const [ticketStatus,setStatus] = useState('')
   useEffect(async () => {
     const val = await getTicket()
-    console.log(val)
+    const userVal = await getUsers()
+    console.log(userVal)
     setData(val)
+    setUser(userVal)
   }, [])
 
 const handleChange = async(event,id) => {
@@ -122,7 +125,8 @@ const handleChange = async(event,id) => {
       alert.success('ticket added to progress',{
         timeout:2000
       })
-      history.push('/admin/Tickets/ticketsInProgress');
+      history.push('/temp');
+      history.goBack();
     }
     catch (err) {
       console.log(err.response)
@@ -150,7 +154,8 @@ const handleChange = async(event,id) => {
       alert.success('ticket closed',{
         timeout:2000
       })
-      history.push('/admin/Tickets/closedTickets');
+      history.push('/temp');
+      history.goBack();
     
     }
     catch (err) {
@@ -161,6 +166,36 @@ const handleChange = async(event,id) => {
     }
   }
 };
+const handleUser = async(e,id)=>{
+  const value = {
+    ticketId: id,
+    userId: e.target.value._id
+  }
+  const body = JSON.stringify(value)
+  console.log(body)
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem('ticket-token')
+    }
+  }
+  try {
+    const res = await axios.post(process.env.REACT_APP_API_URL + "/ticket/assign", body, config)
+    console.log(res.data)
+    alert.success(`ticket assigned to email${e.target.value.email}`,{
+      timeout:3000
+    })
+    history.push('/temp');
+    history.goBack();
+  
+  }
+  catch (err) {
+    console.log(err.response)
+    alert.success(err.response.data.error,{
+      timeout:3000
+    })
+  }
+}
 return (
   <div>
               
@@ -193,9 +228,13 @@ return (
         <Select
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
+          onChange={(e)=>handleUser(e,rowData._id)}
         >
-          <MenuItem value='progress'>Abebe</MenuItem>
-          <MenuItem value='close'>Alemu</MenuItem>
+          {
+            user.map(data=>(
+              <MenuItem value={data}>{data.email}</MenuItem>
+            ))
+          }
         </Select>
       </FormControl>
           </Grid>
@@ -223,27 +262,6 @@ return (
        </div>
       )
     }}
-    // actions={[
-    //   rowData => (
-    //     {
-    //       icon: () => <Button className={rowData.status == 'inprogress' || rowData.status == 'closed'
-    //         ? classes.disable
-    //         : classes.inable}>Progress</Button >,
-    //       tooltip: 'In progress',
-    //       onClick: (event, rowData) => handleProgress(rowData),
-    //       disabled: rowData.status == 'inprogress' || rowData.status == 'closed'
-    //     }),
-    //   rowData => (
-    //     {
-    //       icon: () => <Button className={rowData.status == 'closed'
-    //         ? classes.disable
-    //         : classes.inable} >Close</Button>,
-    //       tooltip: 'Delete User',
-    //       onClick: (event, rowData) => handleDone(rowData),
-    //       disabled: rowData.status == 'closed'
-    //     })
-
-    // ]}
    
   />
     </div>

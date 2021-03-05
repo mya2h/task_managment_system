@@ -61,9 +61,7 @@ export const changePassword = async (value) =>{
         console.log(err.response)
     }
 }
-export const getUsers = async (value) =>{
-    const body = JSON.stringify(value)
-    console.log(body)
+export const getUsers = async () =>{
     const config = {
         headers: {
             'Content-Type': 'application/json',
@@ -71,8 +69,9 @@ export const getUsers = async (value) =>{
         }
     }
     try {
-        const res = await axios.get(process.env.REACT_APP_API_URL+"/user", body, config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/user", config)
         console.log(res.data)
+        return res.data
     }
     catch (err) {
         console.log(err.response)

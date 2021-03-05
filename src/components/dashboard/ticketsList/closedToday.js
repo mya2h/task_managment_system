@@ -9,7 +9,15 @@ import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import Clear from '@material-ui/icons/Clear';
 import BlockIcon from '@material-ui/icons/Block';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 import FirstPage from '@material-ui/icons/FirstPage';
+import { useHistory } from 'react-router'
+import axios from 'axios'
+import { useAlert } from 'react-alert'
 import LastPage from '@material-ui/icons/LastPage';
 import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
@@ -17,7 +25,7 @@ import Search from '@material-ui/icons/Search';
 import Check from '@material-ui/icons/Check';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import Delete from '@material-ui/icons/Delete'
-import {closedToday,updateTicket} from "../../../actions/API"
+import {closedToday,getUsers} from "../../../actions/API"
 const tableIcons = {
   Check: forwardRef((props, ref) => <Check style={{
     color: '#2b94b1'
@@ -67,10 +75,16 @@ const useStyles = makeStyles(theme => ({
     marginTop:theme.spacing(5),
     marginBottom:theme.spacing(5),
     fontSize:16
+  },
+  formControl:{
+    width:"70%"
   }
 }));
 const ClosedTodayTickets = () => {
+  const alert = useAlert()
+  const history = useHistory()
     const classes = useStyles()
+    const [user,setUser] = useState([])
     const [state,setState] = useState({
       columns: [
         { title: 'Class', field: 'class' },
@@ -85,23 +99,40 @@ const ClosedTodayTickets = () => {
 
     useEffect(async()=>{
      const val =  await closedToday()
-     console.log(val)
+     const userVal = await getUsers()
+     console.log(userVal)
      setData(val)
+     setUser(userVal)
     },[])
-    const handleProgress = (val)=>{
-      const value={
-        ticketId:val._id,
-        status:"inprogress"
+    const handleUser = async(e,id)=>{
+      const value = {
+        ticketId: id,
+        userId: e.target.value._id
       }
-      updateTicket(value)
-        console.log(val)
-    }
-    const handleDone = (val)=>{
-      const value={
-        ticketId:val._id,
-        status:"closed"
+      const body = JSON.stringify(value)
+      console.log(body)
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('ticket-token')
+        }
       }
-      updateTicket(value)
+      try {
+        const res = await axios.post(process.env.REACT_APP_API_URL + "/ticket/assign", body, config)
+        console.log(res.data)
+        alert.success(`ticket assigned to email${e.target.value.email}`,{
+          timeout:3000
+        })
+        history.push('/temp');
+        history.goBack();
+      
+      }
+      catch (err) {
+        console.log(err.response)
+        alert.success(err.response.data.error,{
+          timeout:3000
+        })
+      }
     }
     return (
       <MaterialTable
@@ -113,6 +144,24 @@ const ClosedTodayTickets = () => {
           return (
            <div className={classes.detailPage}>
             <Grid container className={classes.root} spacing={2}>
+            <Grid item xs={6}>
+          </Grid>
+          <Grid item xs={6}>
+          <FormControl className={classes.formControl}>
+        <InputLabel id="demo-controlled-open-select-label">Assign User</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          onChange={(e)=>handleUser(e,rowData._id)}
+        >
+          {
+            user.map(data=>(
+              <MenuItem value={data}>{data.email}</MenuItem>
+            ))
+          }
+        </Select>
+      </FormControl>
+          </Grid>
             <Grid item xs={6}>
             Class: {rowData.class}
             <br/>
