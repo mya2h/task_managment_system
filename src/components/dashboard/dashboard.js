@@ -10,6 +10,7 @@ import NewTickets from './ticketsList/newTickets'
 import OpenedTodayTickets from './ticketsList/openedToday'
 import ProgressTickets from './ticketsList/progressTickets'
 import ThreeDaysPassesTickets from './ticketsList/threeDaysOld'
+import ImportedTickets from './ticketsList/importedTickets'
 import Cards from './cards'
 const useStyles = makeStyles({
   root: {
@@ -46,6 +47,7 @@ const Dashboard = () => {
    <Route exact path="/admin/Tickets/threeeDaysOldTickets" component={ThreeDaysPassesTickets} />
    <Route exact path="/admin/Tickets/openedTodayTickets" component={OpenedTodayTickets} />
    <Route exact path="/admin/Tickets/closedTodayTickets" component={ClosedTodayTickets} />
+   <Route exact path="/admin/Tickets/importedTickets" component ={ImportedTickets}/>
    <Redirect from = "/admin/Tickets" to = "/admin/Tickets/allTickets"/>
   </Switch>
   )

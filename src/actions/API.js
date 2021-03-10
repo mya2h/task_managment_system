@@ -107,7 +107,23 @@ export const getTicket = async () =>{
         }
     }
     try {
-        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket", config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?dataSource=insertedByuser", config)
+        console.log(res.data)
+        return res.data
+    }
+    catch (err) {
+        console.log(err.response)
+    }
+}
+export const getImprtedTickets = async () =>{
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('ticket-token')
+        }
+    }
+    try {
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?dataSource=importedByUser", config)
         console.log(res.data)
         return res.data
     }
@@ -141,7 +157,7 @@ export const newTicket = async () =>{
         }
     }
     try {
-        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=open", config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=open&dataSource=insertedByuser", config)
         console.log(res.data)
         return res.data
     }
@@ -160,7 +176,7 @@ export const ticketProgress = async (value) =>{
         }
     }
     try {
-        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=inprogress", config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=inprogress&dataSource=insertedByuser", config)
         console.log(res.data)
         return res.data
     }
@@ -179,7 +195,7 @@ export const ticketClosed = async (value) =>{
         }
     }
     try {
-        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=closed", config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=closed&dataSource=insertedByuser", config)
         console.log(res.data)
         return res.data
     }
@@ -203,7 +219,7 @@ export const older3Day = async (value) =>{
         }
     }
     try {
-        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?ticketOpenedDateFrom="+dateOlder+"&ticketOpenedDateTo="+today, config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?ticketOpenedDateFrom="+dateOlder+"&ticketOpenedDateTo="+today+"&dataSource=insertedByuser", config)
         console.log(res.data)
         return res.data
     }
@@ -225,7 +241,7 @@ export const closedToday = async () =>{
         }
     }
     try {
-        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=closed&ticketClosedDateFrom="+today+"&ticketClosedDateTo="+datelast, config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=closed&ticketClosedDateFrom="+today+"&ticketClosedDateTo="+datelast+"&dataSource=insertedByuser", config)
         console.log(res.data)
         return res.data
     }
@@ -247,7 +263,7 @@ export const openedToday = async () =>{
         }
     }
     try {
-        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=open&ticketOpenedDateFrom="+today+"&ticketOpenedDateTo="+datelast, config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=open&ticketOpenedDateFrom="+today+"&ticketOpenedDateTo="+datelast+"&dataSource=insertedByuser", config)
         console.log(res.data)
         return res.data
     }
@@ -263,7 +279,7 @@ export const opened = async () =>{
         }
     }
     try {
-        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=open", config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?status=open&dataSource=insertedByuser", config)
         console.log(res.data)
         return res.data
     }
