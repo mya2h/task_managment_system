@@ -219,7 +219,7 @@ export const older3Day = async (value) =>{
         }
     }
     try {
-        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?ticketOpenedDateFrom="+dateOlder+"&ticketOpenedDateTo="+today+"&dataSource=insertedByuser", config)
+        const res = await axios.get(process.env.REACT_APP_API_URL+"/ticket?filter=ticketsOlderThanThreeDays&dataSource=insertedByuser", config)
         console.log(res.data)
         return res.data
     }
