@@ -145,18 +145,6 @@ const SideNav = () => {
             <ListItemText primary="Tickets Closed Today" />
           </ListItem>
         </NavLink>
-        <NavLink
-          to="/admin/Tickets/importedTickets"
-           className="Nav_link"
-          activeClassName="activeRoute"
-          activeStyle={{ color: 'rgb(253, 184, 81)' }}>
-          <ListItem button className={classes.listitem}>
-            <ListItemIcon className={classes.icon}>
-              <LocalActivityIcon />
-            </ListItemIcon>
-            <ListItemText primary="Imported Tickets" />
-          </ListItem>
-        </NavLink>
       </List>
     </MuiThemeProvider>
 
