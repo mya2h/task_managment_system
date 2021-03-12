@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import ChipInput from 'material-ui-chip-input'
 import { TextField, Grid, FormHelperText, FormControl, InputLabel, MenuItem, Select, Paper } from '@material-ui/core';
 import { CodeSharp, Telegram } from '@material-ui/icons'
 import Notifications, { notify } from 'react-notify-toast';
@@ -64,15 +65,18 @@ const NewTicket = () => {
         year: '',
         leader: '',
         baseCamp: '',
-        projectLink: '',
+        projectLink: [],
         description: '',
-        assignedTo: userId
     })
 
     const handleChange = (event) => {
         console.log(event.target.value)
         setticket({ ...ticket, [event.target.name]: event.target.value })
     };
+    const handleChangeProject = (val)=>{
+        console.log(val)
+        setticket({ ...ticket, projectLink: val })
+    }
     const handelRadioChange = (event) => {
         setticket({ ...ticket, year: event.target.value })
         setValue(event.target.value);
@@ -219,14 +223,19 @@ const NewTicket = () => {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField
+                        <ChipInput
+                        style={{width:"100%"}}
+                         label="Project Link"
+  onChange={(chips) => handleChangeProject(chips)}
+/>
+                            {/* <TextField
                                 required
                                 fullWidth
                                 name="projectLink"
                                 label="Project Link"
                                 value={ticket.projectLink}
                                 onChange={handleChange}
-                            />
+                            /> */}
                         </Grid>
                         <Grid item xs={12}>
                             <TextField

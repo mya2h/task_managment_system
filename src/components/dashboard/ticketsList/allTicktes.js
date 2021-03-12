@@ -213,6 +213,7 @@ return (
           <FormControl className={classes.formControl}>
         <InputLabel id="demo-controlled-open-select-label">Change Ticket Status</InputLabel>
         <Select
+           mode="multiple"
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
           onChange={(e)=>handleChange(e,rowData._id)}
@@ -226,9 +227,10 @@ return (
           <FormControl className={classes.formControl}>
         <InputLabel id="demo-controlled-open-select-label">Assign User</InputLabel>
         <Select
+        mode="multiple"
           labelId="demo-controlled-open-select-label"
           id="demo-controlled-open-select"
-          onChange={(e)=>handleUser(e,rowData._id)}
+          // onChange={(e)=>handleUser(e,rowData._id)}
         >
           {
             user.map(data=>(
