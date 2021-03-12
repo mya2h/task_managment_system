@@ -2,6 +2,7 @@ import React, { useEffect, forwardRef, useState } from 'react'
 import { Button, Card, Grid, Paper, CardHeader } from '@material-ui/core';
 import MaterialTable from 'material-table';
 import Edit from '@material-ui/icons/Edit';
+import Chip from '@material-ui/core/Chip';
 import FilterList from '@material-ui/icons/FilterList';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import { makeStyles } from '@material-ui/core/styles';
@@ -253,7 +254,15 @@ return (
         <br/>
            Base Camp:{rowData.baseCamp}
            <br/>
-           Project Link:{rowData.projectLink}
+           Project Link:{rowData.projectLink.map((data)=>(
+             <div>
+                  <Chip
+        variant="outlined"
+        size="small"
+        label={data}
+      />
+             </div>
+           ))}
            <br/>
            Description:{rowData.description}
         </Grid>
