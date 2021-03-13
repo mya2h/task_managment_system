@@ -23,6 +23,9 @@ import Search from '@material-ui/icons/Search';
 import Check from '@material-ui/icons/Check';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import Delete from '@material-ui/icons/Delete'
+import {FormControl,IconButton, Dialog, DialogTitle} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import EditTicket from '../editCards'
 import {ticketClosed,getUsers} from '../../../actions/API'
 const tableIcons = {
   Check: forwardRef((props, ref) => <Check style={{
@@ -79,6 +82,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 const ClosedTickets = () => {
+  const [open, setOpen] = React.useState(false);
+  const [ticket, setTicket] = useState(null)
+  const handleClose = () => {
+    setOpen(false)
+  };
+  const handleOpen = (rowData) => {
+    setOpen(true)
+    setTicket(rowData)
+  };
   const alert = useAlert()
   const history = useHistory()
   const [user,setUser] = useState([])
@@ -146,6 +158,7 @@ const ClosedTickets = () => {
       console.log(value)
     }
     return (
+      <div>
       <MaterialTable
         title="Closed Tickets"
         icons={tableIcons}
@@ -228,7 +241,23 @@ const ClosedTickets = () => {
            </div>
           )
         }}        
+        actions={[
+          {
+            icon: ()=><Button>Edit</Button>,
+            tooltip: 'Edit Ticket',
+            onClick: (event, rowData) =>{handleOpen(rowData)}
+          }
+        ]}
       />
+      <Dialog onClose={handleClose} className={classes.modal} aria-labelledby="simple-dialog-title" open={open}>
+        <DialogTitle id="simple-dialog-title">Edit Ticket
+        <IconButton onClick={handleClose} style={{float:'right'}} className={classes.dialogTitle}>
+            <CloseIcon />
+        </IconButton>
+        </DialogTitle>
+    <EditTicket value={ticket} onCloseModal={handleClose}/>
+    </Dialog>
+    </div>
     )
   }
 export default ClosedTickets

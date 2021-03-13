@@ -21,7 +21,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
+import {FormControl,IconButton, Dialog, DialogTitle} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import EditTicket from '../editCards'
 import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
@@ -85,6 +87,15 @@ formControl:{
 }
 }));
 const ProgressTickets = () => {
+  const [open, setOpen] = React.useState(false);
+  const [ticket, setTicket] = useState(null)
+  const handleClose = () => {
+    setOpen(false)
+  };
+  const handleOpen = (rowData) => {
+    setOpen(true)
+    setTicket(rowData)
+  };
   const alert = useAlert()
   const history = useHistory()
   const classes = useStyles();
@@ -196,6 +207,7 @@ const ProgressTickets = () => {
       console.log(value)
     }
     return (
+      <div>
       <MaterialTable
         title="Tickets In Progress"
         icons={tableIcons}
@@ -288,7 +300,23 @@ const ProgressTickets = () => {
            </div>
           )
         }}      
+        actions={[
+          {
+            icon: ()=><Button>Edit</Button>,
+            tooltip: 'Edit Ticket',
+            onClick: (event, rowData) =>{handleOpen(rowData)}
+          }
+        ]}
       />
+      <Dialog onClose={handleClose} className={classes.modal} aria-labelledby="simple-dialog-title" open={open}>
+        <DialogTitle id="simple-dialog-title">Edit Ticket
+        <IconButton onClick={handleClose} style={{float:'right'}} className={classes.dialogTitle}>
+            <CloseIcon />
+        </IconButton>
+        </DialogTitle>
+    <EditTicket value={ticket} onCloseModal={handleClose}/>
+    </Dialog>
+    </div>
     )
   }
 export default ProgressTickets
