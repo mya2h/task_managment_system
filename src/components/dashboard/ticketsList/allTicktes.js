@@ -1,7 +1,8 @@
 import React, { useEffect, forwardRef, useState } from 'react'
 import { Button, Card, Grid, Paper, CardHeader } from '@material-ui/core';
 import MaterialTable from 'material-table';
-import useAutocomplete from '@material-ui/lab/useAutocomplete';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 import Edit from '@material-ui/icons/Edit';
 import FilterList from '@material-ui/icons/FilterList';
 import Chip from '@material-ui/core/Chip';
@@ -86,6 +87,7 @@ const ALLTickets = () => {
   const alert = useAlert()
   const history = useHistory()
   const classes = useStyles();
+  const [value, setValue] = React.useState([]);
   const [state, setState] = useState({
     columns: [
       { title: 'Class', field: 'class' },
@@ -226,7 +228,25 @@ return (
       </FormControl>
           </Grid>
           <Grid item xs={6}>
-          <FormControl className={classes.formControl}>
+          <Autocomplete
+        multiple
+        id="tags-standard"
+        options={user}
+      onChange={(event, newValue) => {
+       console.log(newValue)
+      }}
+
+        getOptionLabel={(option) => option.email}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            variant="standard"
+            label="Assign To"
+            placeholder="Users"
+          />
+        )}
+      />
+          {/* <FormControl className={classes.formControl}>
         <InputLabel id="demo-controlled-open-select-label">Assign User</InputLabel>
         <Select
         mode="multiple"
@@ -240,7 +260,7 @@ return (
             ))
           }
         </Select>
-      </FormControl>
+      </FormControl> */}
           </Grid>
         <Grid item xs={6}>
         Class: {rowData.class}
