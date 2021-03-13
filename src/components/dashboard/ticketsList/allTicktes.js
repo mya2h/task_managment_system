@@ -18,17 +18,19 @@ import Remove from '@material-ui/icons/Remove';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
+import {FormControl,IconButton, Dialog, DialogTitle} from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import Check from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
 import { useHistory } from 'react-router'
 import axios from 'axios'
 import { useAlert } from 'react-alert'
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import Delete from '@material-ui/icons/Delete'
 import { getTicket, getUsers } from '../../../actions/API'
+import EditTicket from '../editCards'
 const tableIcons = {
   Check: forwardRef((props, ref) => <Check style={{
     color: '#2b94b1'
@@ -84,6 +86,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 const ALLTickets = () => {
+  const [open, setOpen] = React.useState(false);
+  const [ticket, setTicket] = useState(null)
+  const handleClose = () => {
+    setOpen(false)
+  };
+  const handleOpen = (rowData) => {
+    setOpen(true)
+    setTicket(rowData)
+  };
   const alert = useAlert()
   const history = useHistory()
   const classes = useStyles();
@@ -312,8 +323,22 @@ const ALLTickets = () => {
             </div>
           )
         }}
-
+        actions={[
+          {
+            icon: ()=><Button>Edit</Button>,
+            tooltip: 'Edit Ticket',
+            onClick: (event, rowData) =>{handleOpen(rowData)}
+          }
+        ]}
       />
+      <Dialog onClose={handleClose} className={classes.modal} aria-labelledby="simple-dialog-title" open={open}>
+        <DialogTitle id="simple-dialog-title">Edit Ticket
+        <IconButton onClick={handleClose} style={{float:'right'}} className={classes.dialogTitle}>
+            <CloseIcon />
+        </IconButton>
+        </DialogTitle>
+    <EditTicket value={ticket} onCloseModal={handleClose}/>
+    </Dialog>
     </div>
   )
 }
