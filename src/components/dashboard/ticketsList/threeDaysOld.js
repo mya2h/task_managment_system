@@ -3,6 +3,8 @@ import {Button,Card,Grid,Paper,CardHeader  } from '@material-ui/core';
 import MaterialTable from 'material-table';
 import Edit from '@material-ui/icons/Edit';
 import Chip from '@material-ui/core/Chip';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 import FilterList from '@material-ui/icons/FilterList';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
@@ -166,12 +168,20 @@ const ThreeDaysPassesTickets = () => {
       }
     }
   };
-  const handleUser = async(e,id)=>{
-    const value = {
+  let [value, setValue] = useState([]);
+  const handleUser = async (e, id) => {
+    e.preventDefault()
+    console.log(value)
+    let assignUser = []
+    value.map(data => {
+      assignUser.push(data._id)
+    })
+    console.log(assignUser)
+    const assignValue = {
       ticketId: id,
-      userId: e.target.value._id
+      userId: assignUser
     }
-    const body = JSON.stringify(value)
+    const body = JSON.stringify(assignValue)
     console.log(body)
     const config = {
       headers: {
@@ -182,19 +192,25 @@ const ThreeDaysPassesTickets = () => {
     try {
       const res = await axios.post(process.env.REACT_APP_API_URL + "/ticket/assign", body, config)
       console.log(res.data)
-      alert.success(`ticket assigned to email${e.target.value.email}`,{
-        timeout:3000
+      alert.success(`ticket assigned successfully`, {
+        timeout: 3000
       })
+      assignUser = []
       history.push('/temp');
       history.goBack();
-    
+
     }
     catch (err) {
       console.log(err.response)
-      alert.success(err.response.data.error,{
-        timeout:3000
+      alert.error(err.response.data.error, {
+        timeout: 3000
       })
     }
+  }
+  const onInputChange = (event, val) => {
+    console.log(val)
+    value = val
+    console.log(value)
   }
     return (
       <MaterialTable
@@ -220,20 +236,43 @@ const ThreeDaysPassesTickets = () => {
       </FormControl>
           </Grid>
           <Grid item xs={6}>
-          <FormControl className={classes.formControl}>
-        <InputLabel id="demo-controlled-open-select-label">Assign User</InputLabel>
-        <Select
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
-          onChange={(e)=>handleUser(e,rowData._id)}
-        >
-          {
-            user.map(data=>(
-              <MenuItem value={data}>{data.email}</MenuItem>
-            ))
-          }
-        </Select>
-      </FormControl>
+          {rowData.isTicketAssigned == true && (
+                    <div>
+                      Assigned To:{rowData.assignedTo.map((data) => (
+                      <div>
+                        <Chip
+                          variant="outlined"
+                          size="small"
+                          label={data.name}
+                        />
+                      </div>
+                    ))}
+                    </div>
+                  )}
+                  {rowData.isTicketAssigned !=true && (
+                    <form onSubmit={(e) => handleUser(e, rowData._id)} >
+                      <Autocomplete
+                        multiple
+                        style={{ width: "70%" ,float:"left"}}
+                        id="tags-standard"
+                        options={user}
+                        onChange={onInputChange}
+                        getOptionLabel={(option) => option.email}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            variant="standard"
+                            // onChange={({ target }) => setValue(target.value)}
+                            label="Assign To"
+                            placeholder="Users"
+                          />
+                        )}
+                      />
+                      <Button type="submit"
+                        variant="contained" color="primary" style={{ float: "left" }}>
+                        Assign</Button>
+                    </form>
+                  )}
           </Grid>
             <Grid item xs={6}>
             Class: {rowData.class}

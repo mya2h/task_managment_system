@@ -72,22 +72,22 @@ const useStyles = makeStyles(theme => ({
   disable: {
     backgroundColor: 'rgba(177, 171, 171, 0.26)'
   },
-  detailPage:{
-    marginLeft:theme.spacing(10),
-    marginRight:theme.spacing(10),
-    marginTop:theme.spacing(5),
-    marginBottom:theme.spacing(5),
-    fontSize:16
+  detailPage: {
+    marginLeft: theme.spacing(10),
+    marginRight: theme.spacing(10),
+    marginTop: theme.spacing(5),
+    marginBottom: theme.spacing(5),
+    fontSize: 16
   },
-  formControl:{
-    width:"70%"
+  formControl: {
+    width: "70%"
   }
 }));
 const ALLTickets = () => {
   const alert = useAlert()
   const history = useHistory()
   const classes = useStyles();
-  const [value, setValue] = React.useState([]);
+  let [value, setValue] = useState([]);
   const [state, setState] = useState({
     columns: [
       { title: 'Class', field: 'class' },
@@ -98,8 +98,8 @@ const ALLTickets = () => {
     ],
   })
   const [data, setData] = useState([])
-  const [user,setUser] = useState([])
-  const [ticketStatus,setStatus] = useState('')
+  const [user, setUser] = useState([])
+  const [ticketStatus, setStatus] = useState('')
   useEffect(async () => {
     const val = await getTicket()
     const userVal = await getUsers()
@@ -108,14 +108,81 @@ const ALLTickets = () => {
     setUser(userVal)
   }, [])
 
-const handleChange = async(event,id) => {
-  setStatus(event.target.value)
-  if(event.target.value == "progress"){
-    const value = {
-      ticketId: id,
-      status: "inprogress"
+  const handleChange = async (event, id) => {
+    setStatus(event.target.value)
+    if (event.target.value == "progress") {
+      const value = {
+        ticketId: id,
+        status: "inprogress"
+      }
+      const body = JSON.stringify(value)
+      console.log(body)
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('ticket-token')
+        }
+      }
+      try {
+        const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
+        console.log(res.data)
+        alert.success('ticket added to progress', {
+          timeout: 2000
+        })
+        history.push('/temp');
+        history.goBack();
+      }
+      catch (err) {
+        console.log(err.response)
+        alert.success(err.response.data.error, {
+          timeout: 2000
+        })
+      }
     }
-    const body = JSON.stringify(value)
+    if (event.target.value == "close") {
+      const value = {
+        ticketId: id,
+        status: "closed"
+      }
+      const body = JSON.stringify(value)
+      console.log(body)
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('ticket-token')
+        }
+      }
+      try {
+        const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
+        console.log(res.data)
+        alert.success('ticket closed', {
+          timeout: 2000
+        })
+        history.push('/temp');
+        history.goBack();
+
+      }
+      catch (err) {
+        console.log(err.response)
+        alert.success(err.response.data.error, {
+          timeout: 2000
+        })
+      }
+    }
+  };
+  const handleUser = async (e, id) => {
+    e.preventDefault()
+    console.log(value)
+    let assignUser = []
+    value.map(data => {
+      assignUser.push(data._id)
+    })
+    console.log(assignUser)
+    const assignValue = {
+      ticketId: id,
+      userId: assignUser
+    }
+    const body = JSON.stringify(assignValue)
     console.log(body)
     const config = {
       headers: {
@@ -124,179 +191,130 @@ const handleChange = async(event,id) => {
       }
     }
     try {
-      const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
+      const res = await axios.post(process.env.REACT_APP_API_URL + "/ticket/assign", body, config)
       console.log(res.data)
-      alert.success('ticket added to progress',{
-        timeout:2000
+      alert.success(`ticket assigned successfully`, {
+        timeout: 3000
       })
+      assignUser = []
       history.push('/temp');
       history.goBack();
+
     }
     catch (err) {
       console.log(err.response)
-      alert.success(err.response.data.error,{
-        timeout:2000
+      alert.error(err.response.data.error, {
+        timeout: 3000
       })
     }
   }
-  if(event.target.value == "close"){
-    const value = {
-      ticketId: id,
-      status: "closed"
-    }
-    const body = JSON.stringify(value)
-    console.log(body)
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('ticket-token')
-      }
-    }
-    try {
-      const res = await axios.put(process.env.REACT_APP_API_URL + "/ticket", body, config)
-      console.log(res.data)
-      alert.success('ticket closed',{
-        timeout:2000
-      })
-      history.push('/temp');
-      history.goBack();
-    
-    }
-    catch (err) {
-      console.log(err.response)
-      alert.success(err.response.data.error,{
-        timeout:2000
-      })
-    }
+  const onInputChange = (event, val) => {
+    console.log(val)
+    value = val
+    console.log(value)
   }
-};
-const handleUser = async(e,id)=>{
-  const value = {
-    ticketId: id,
-    userId: e.target.value._id
-  }
-  const body = JSON.stringify(value)
-  console.log(body)
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': localStorage.getItem('ticket-token')
-    }
-  }
-  try {
-    const res = await axios.post(process.env.REACT_APP_API_URL + "/ticket/assign", body, config)
-    console.log(res.data)
-    alert.success(`ticket assigned to email${e.target.value.email}`,{
-      timeout:3000
-    })
-    history.push('/temp');
-    history.goBack();
-  
-  }
-  catch (err) {
-    console.log(err.response)
-    alert.success(err.response.data.error,{
-      timeout:3000
-    })
-  }
-}
-return (
-  <div>
-              
-  <MaterialTable
-    title="All Tickets"
-    icons={tableIcons}
-    columns={state.columns}
-    data={data}
-    detailPanel={rowData => {
-      return (
-       <div className={classes.detailPage}>
+  return (
+    <div>
 
-        <Grid container className={classes.root} spacing={2}>
-          <Grid item xs={6}>
-          <FormControl className={classes.formControl}>
-        <InputLabel id="demo-controlled-open-select-label">Change Ticket Status</InputLabel>
-        <Select
-           mode="multiple"
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
-          onChange={(e)=>handleChange(e,rowData._id)}
-        >
-          <MenuItem value='progress'>Progress</MenuItem>
-          <MenuItem value='close'>Close</MenuItem>
-        </Select>
-      </FormControl>
-          </Grid>
-          <Grid item xs={6}>
-          <Autocomplete
-        multiple
-        id="tags-standard"
-        options={user}
-      onChange={(event, newValue) => {
-       console.log(newValue)
-      }}
+      <MaterialTable
+        title="All Tickets"
+        icons={tableIcons}
+        columns={state.columns}
+        data={data}
+        detailPanel={rowData => {
+          return (
+            <div className={classes.detailPage}>
 
-        getOptionLabel={(option) => option.email}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            variant="standard"
-            label="Assign To"
-            placeholder="Users"
-          />
-        )}
-      />
-          {/* <FormControl className={classes.formControl}>
-        <InputLabel id="demo-controlled-open-select-label">Assign User</InputLabel>
-        <Select
-        mode="multiple"
-          labelId="demo-controlled-open-select-label"
-          id="demo-controlled-open-select"
-          // onChange={(e)=>handleUser(e,rowData._id)}
-        >
-          {
-            user.map(data=>(
-              <MenuItem value={data}>{data.email}</MenuItem>
-            ))
-          }
-        </Select>
-      </FormControl> */}
-          </Grid>
-        <Grid item xs={6}>
-        Class: {rowData.class}
-        <br/>
+              <Grid container className={classes.root} spacing={2}>
+                <Grid item xs={6}>
+                  <FormControl className={classes.formControl}>
+                    <InputLabel id="demo-controlled-open-select-label">Change Ticket Status</InputLabel>
+                    <Select
+                      mode="multiple"
+                      labelId="demo-controlled-open-select-label"
+                      id="demo-controlled-open-select"
+                      onChange={(e) => handleChange(e, rowData._id)}
+                    >
+                      <MenuItem value='progress'>Progress</MenuItem>
+                      <MenuItem value='close'>Close</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={6}>
+                  {rowData.isTicketAssigned == true && (
+                    <div>
+                      Assigned To:{rowData.assignedTo.map((data) => (
+                      <div>
+                        <Chip
+                          variant="outlined"
+                          size="small"
+                          label={data.name}
+                        />
+                      </div>
+                    ))}
+                    </div>
+                  )}
+                  {rowData.isTicketAssigned !=true && (
+                    <form onSubmit={(e) => handleUser(e, rowData._id)}>
+                      <Autocomplete
+                        multiple
+                        style={{ width: "70%" ,float:"left" }}
+                        id="tags-standard"
+                        options={user}
+                        onChange={onInputChange}
+                        getOptionLabel={(option) => option.email}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            variant="standard"
+                            // onChange={({ target }) => setValue(target.value)}
+                            label="Assign To"
+                            placeholder="Users"
+                          />
+                        )}
+                      />
+                      <Button type="submit"
+                        variant="contained" color="primary" style={{ float: "left" }}>
+                        Assign</Button>
+                    </form>
+                  )}
+
+                </Grid>
+                <Grid item xs={6}>
+                  Class: {rowData.class}
+                  <br />
            Director:{rowData.director}
-           <br/>
+                  <br />
            Project Type:{rowData.projectType}
-           <br/>
+                  <br />
            Year:{rowData.year}
 
-        </Grid>
-        <Grid item xs={6}>
-        Leader:{rowData.leader}
-        <br/>
+                </Grid>
+                <Grid item xs={6}>
+                  Leader:{rowData.leader}
+                  <br />
            Base Camp:{rowData.baseCamp}
-           <br/>
-           Project Link:{rowData.projectLink.map((data)=>(
-             <div>
-                  <Chip
-        variant="outlined"
-        size="small"
-        label={data}
-      />
-             </div>
-           ))}
-           <br/>
+                  <br />
+           Project Link:{rowData.projectLink.map((data) => (
+                    <div>
+                      <Chip
+                        variant="outlined"
+                        size="small"
+                        label={data}
+                      />
+                    </div>
+                  ))}
+                  <br />
            Description:{rowData.description}
-        </Grid>
+                </Grid>
 
-         </Grid>
-       </div>
-      )
-    }}
-   
-  />
+              </Grid>
+            </div>
+          )
+        }}
+
+      />
     </div>
-)
-  }
+  )
+}
 export default ALLTickets
